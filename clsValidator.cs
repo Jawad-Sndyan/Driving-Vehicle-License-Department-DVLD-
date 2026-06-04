@@ -71,7 +71,15 @@ namespace DVLD_Buisness
             return allowedExtensions.Contains(ext);
         }
 
+        public static bool IsValidPassword(string password)
+    => !string.IsNullOrWhiteSpace(password) &&
+       password.Length >= 4 &&
+       Regex.IsMatch(password, @"^\d+$");
 
-
+        public static bool IsValidUsername(string username)
+    => !string.IsNullOrWhiteSpace(username) &&
+       username.Length >= 3 &&
+       username.Length <= 20 &&
+       Regex.IsMatch(username, @"^[a-zA-Z0-9_]+$");
     }
 }
