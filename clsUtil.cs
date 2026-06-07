@@ -64,5 +64,21 @@ namespace DVLD_Buisness
                 return false;
             }
         }
+
+        public static string Encrypt(string password)
+        {
+            string encrypted = "";
+            foreach (char c in password)
+                encrypted += (char)(c + 10);
+            return encrypted;
+        }
+
+        public static string Decrypt(string encryptedPassword)
+        {
+            string decrypted = "";
+            foreach (char c in encryptedPassword)
+                decrypted += (char)(c - 10);
+            return decrypted;
+        }
     }
 }

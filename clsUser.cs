@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net.Http.Headers;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -104,6 +106,26 @@ namespace DVLD_Buisness
             return null;
 
 
+        }
+
+        public static clsUser FindUserInfoByUsernameAndPassword(string UserName,string Password)
+        {
+             {
+                int UserID = -1, PersonID = -1;
+                bool IsActive = false;
+
+
+
+                bool Found = clsUserData.GetUserInfoByUsernameAndPassword(UserName, Password, ref UserID, ref PersonID, ref IsActive);
+
+
+                if (Found)
+                    return new clsUser(UserID, PersonID, UserName, Password, IsActive);
+
+                return null;
+
+
+            }
         }
 
 
