@@ -144,8 +144,11 @@ namespace DVLD_Buisness
             switch(Mode)
                 {
                 case enMode.AddNew:
-                    if(_AddUser()) 
+                    if(_AddUser())
+                    {
+                        Mode = enMode.Update;
                         return true;
+                    }
 
                     return false;
                 case enMode.Update:
