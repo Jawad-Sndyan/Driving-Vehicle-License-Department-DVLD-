@@ -96,7 +96,7 @@
             this.dgvTestTypes.RowHeadersWidth = 82;
             this.dgvTestTypes.RowTemplate.Height = 45;
             this.dgvTestTypes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvTestTypes.Size = new System.Drawing.Size(1394, 581);
+            this.dgvTestTypes.Size = new System.Drawing.Size(1680, 581);
             this.dgvTestTypes.TabIndex = 11;
             // 
             // cms
@@ -133,7 +133,7 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1394, 320);
+            this.groupBox1.Size = new System.Drawing.Size(1680, 320);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             // 
@@ -141,7 +141,7 @@
             // 
             this.button1.BackgroundImage = global::DVLD.Properties.Resources.TestType_512;
             this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button1.Location = new System.Drawing.Point(620, 64);
+            this.button1.Location = new System.Drawing.Point(763, 64);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(155, 155);
             this.button1.TabIndex = 1;
@@ -152,7 +152,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.125F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))));
             this.label1.ForeColor = System.Drawing.Color.LightPink;
-            this.label1.Location = new System.Drawing.Point(488, 251);
+            this.label1.Location = new System.Drawing.Point(631, 251);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(419, 51);
             this.label1.TabIndex = 0;
@@ -165,7 +165,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.groupBox2.Location = new System.Drawing.Point(0, 901);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(1394, 107);
+            this.groupBox2.Size = new System.Drawing.Size(1680, 107);
             this.groupBox2.TabIndex = 12;
             this.groupBox2.TabStop = false;
             // 
@@ -210,7 +210,7 @@
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))));
             this.btnClose.ForeColor = System.Drawing.Color.LightPink;
-            this.btnClose.Location = new System.Drawing.Point(1119, 27);
+            this.btnClose.Location = new System.Drawing.Point(1405, 27);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(272, 77);
             this.btnClose.TabIndex = 0;
@@ -224,6 +224,7 @@
             this.colID.MinimumWidth = 10;
             this.colID.Name = "colID";
             this.colID.ReadOnly = true;
+            this.colID.Width = 200;
             // 
             // colTitle
             // 
@@ -247,20 +248,21 @@
             this.colFees.MinimumWidth = 10;
             this.colFees.Name = "colFees";
             this.colFees.ReadOnly = true;
+            this.colFees.Width = 145;
             // 
             // frmListTestTypes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(25)))), ((int)(((byte)(53)))));
-            this.ClientSize = new System.Drawing.Size(1394, 1008);
+            this.ClientSize = new System.Drawing.Size(1680, 1008);
             this.Controls.Add(this.dgvTestTypes);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox2);
             this.ForeColor = System.Drawing.Color.LightPink;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximumSize = new System.Drawing.Size(1420, 1079);
-            this.MinimumSize = new System.Drawing.Size(1420, 1079);
+            this.MaximumSize = new System.Drawing.Size(1706, 1079);
+            this.MinimumSize = new System.Drawing.Size(1706, 1079);
             this.Name = "frmListTestTypes";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmTestTypes";
