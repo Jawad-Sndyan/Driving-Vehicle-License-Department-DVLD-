@@ -28,6 +28,7 @@ namespace DVLD
         {
             _dtAllTestTypes = clsTestTypes.GetAllTestTypes();
             dgvTestTypes.DataSource = _dtAllTestTypes;
+            lblRecords.Text= _dtAllTestTypes.Rows.Count.ToString(); 
         }
 
         private int _GetSelectedApplicationTypeID()
