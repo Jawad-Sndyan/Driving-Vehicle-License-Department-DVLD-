@@ -10,8 +10,8 @@ namespace DVLD_Buisness
 {
     public class clsApplication
     {
-        private enum enMode {AddNew=0,Update=1}
-        private enMode _Mode=enMode.AddNew; 
+        protected enum enMode {AddNew=0,Update=1}
+        protected enMode _Mode=enMode.AddNew; 
         public enum enApplicationTypes { New_LocalDriving_License_Service=1, Renew_Driving_License_Service=2,
         Replacement_for_a_Lost_Driving_License=3, Replacement_for_a_Damaged_Driving_License=4,
             Release_Detained_Driving_License=5, New_International_License=6, Retake_Test=7
@@ -167,8 +167,6 @@ namespace DVLD_Buisness
 
 
                     return false;
-                default:
-                  
             }
 
             return false;
