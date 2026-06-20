@@ -1,6 +1,7 @@
 ﻿using DVLD_DataAccess;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ namespace DVLD_Buisness
 
         public int LocalDrivingLicenseApplicationID { get; set; }
         public int LicenseClassID { get; set; }
+
+        public clsLicenseClass LicenseClass { get; set; }
 
 
         private bool _AddNewLocalDrivingLicenseApplication()
@@ -32,6 +35,7 @@ namespace DVLD_Buisness
         {
             LocalDrivingLicenseApplicationID = -1;
             LicenseClassID = -1;
+            LicenseClass = null;
             _Mode = enMode.AddNew;
         }
 
@@ -42,6 +46,7 @@ namespace DVLD_Buisness
         {
             LocalDrivingLicenseApplicationID = localDrivingLicenseApplicationID;
             LicenseClassID = licenseClassID;
+            LicenseClass = clsLicenseClass.Find(licenseClassID);
             ApplicationID = applicationID;
             PersonID = applicantPersonID;
             ApplicationDate = applicationDate;
@@ -95,6 +100,11 @@ namespace DVLD_Buisness
             return null;
 
 
+        }
+
+        public static DataTable GetAllLocalDrivingLicenseApplications()
+        {
+            return clsLocalDrivingLicenseApplicationData.GetAllLocalDrivingLicenseApplications();
         }
 
         public bool Delete()
