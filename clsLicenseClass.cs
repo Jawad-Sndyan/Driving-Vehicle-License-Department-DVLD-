@@ -41,7 +41,7 @@ namespace DVLD_Buisness
         {
             return clsLicenseClassData.GetAllLicenseClasses();
         }
-        public static clsLicenseClass Find(int licenseClassID)
+        public static clsLicenseClass FindByID(int licenseClassID)
         {
             string className, classDescription;
             int minimumAllowedAge, defaultValidityLength;
@@ -61,6 +61,29 @@ namespace DVLD_Buisness
             }
 
             return null;    
+        }
+
+
+        public static clsLicenseClass FindByClassName(string className)
+        {
+            string classDescription;
+            int minimumAllowedAge, defaultValidityLength, licenseClassID;
+            float classFees;
+            classDescription = string.Empty;
+            minimumAllowedAge = defaultValidityLength = licenseClassID = -1;
+            classFees = -1;
+
+
+            bool isFound = clsLicenseClassData.GetLicenseClassInfoByClassName(className, ref licenseClassID, ref classDescription, ref minimumAllowedAge,
+              ref defaultValidityLength, ref classFees);
+
+            if (isFound)
+            {
+                return new clsLicenseClass(licenseClassID, className, classDescription, minimumAllowedAge,
+                    defaultValidityLength, classFees);
+            }
+
+            return null;
         }
     }
 }

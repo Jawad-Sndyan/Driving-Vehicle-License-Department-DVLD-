@@ -102,5 +102,62 @@ namespace DVLD_DataAccess
 
             return isFound;
         }
+
+
+
+
+        public static bool GetLicenseClassInfoByClassName(string ClassName, ref int LicenseClassID, ref string ClassDescription, ref int MinimumAllowedAge, ref int DefaultValidityLength, ref float ClassFees)
+        {
+            bool isFound = false;
+
+            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
+
+            string query = @"select LicenseClassID,ClassDescription,MinimumAllowedAge,
+                            DefaultValidityLength,ClassFees from LicenseClasses
+                            where ClassName=@ClassName";
+
+
+
+            SqlCommand command = new SqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@ClassName", ClassName);
+
+            try
+            {
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+
+                    isFound = true;
+
+                    LicenseClassID = Convert.ToInt32(reader["LicenseClassID"]);
+                    ClassDescription = reader["ClassDescription"].ToString();
+                    MinimumAllowedAge = Convert.ToInt32(reader["MinimumAllowedAge"]);
+                    DefaultValidityLength = Convert.ToInt32(reader["DefaultValidityLength"]);
+                    ClassFees = Convert.ToSingle(reader["ClassFees"]);
+
+                }
+                else
+                {
+                    isFound = false;
+                }
+
+                reader.Close();
+
+
+            }
+            catch (Exception ex)
+            {
+                isFound = false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return isFound;
+        }
     }
 }
