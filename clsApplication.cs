@@ -45,7 +45,7 @@ namespace DVLD_Buisness
                         return "Completed";
                         break;
                     default:
-                        return "Unknoun";
+                        return "Unknown";
                         break;
                 }
             }
@@ -59,8 +59,8 @@ namespace DVLD_Buisness
 
         private bool _AddNewApplication()
         {
-
-            int ApplicationID = clsApplicationData.AddNewApplication(PersonID, (int)ApplicationTypeID, PaidFees, UserID);
+            
+            ApplicationID = clsApplicationData.AddNewApplication(PersonID, (int)ApplicationTypeID, PaidFees, UserID);
 
             return ApplicationID != -1;
         }
@@ -73,7 +73,7 @@ namespace DVLD_Buisness
         public clsApplication()
         {
             _Mode=enMode.AddNew;
-            ApplicationID = 1;
+            ApplicationID = -1;
             PersonID = -1;
             Person = null;
             ApplicationDate=DateTime.MinValue;
@@ -134,7 +134,18 @@ namespace DVLD_Buisness
 
         public static bool DoesPersonHaveActiveApplication(int applicantPersonID, int applicationTypeID)
         {
-            return clsApplicationData.DoesPersonHaveActiveApplication(applicantPersonID , applicationTypeID);
+            return clsApplicationData.DoesPersonHaveActiveApplication(applicantPersonID, applicationTypeID);
+        }
+
+        public static int GetActiveApplicationIDForLicenseClass(int ApplicantPersonID, int ApplicationTypeID, int LicenseClassID)
+        {
+            return clsApplicationData.GetActiveApplicationIDForLicenseClass(ApplicantPersonID, ApplicationTypeID, LicenseClassID);
+        }
+
+        // For Now
+        public static int GetAccomplishedApplicationIDForLicenseClass(int ApplicantPersonID, int ApplicationTypeID, int LicenseClassID)
+        {
+            return clsApplicationData.GetAccomplishedApplicationIDForLicenseClass(ApplicantPersonID, ApplicationTypeID, LicenseClassID);
         }
 
         public bool Cancel()

@@ -32,7 +32,7 @@ namespace DVLD_DataAccess
             }
             catch (Exception ex)
             {
-                return null;
+                dt = null;
             }
             finally
             {

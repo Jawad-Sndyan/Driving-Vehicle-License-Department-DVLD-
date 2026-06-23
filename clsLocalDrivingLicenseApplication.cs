@@ -21,7 +21,9 @@ namespace DVLD_Buisness
 
         private bool _AddNewLocalDrivingLicenseApplication()
         {
-            int LocalDrivingLicenseApplicationID = clsLocalDrivingLicenseApplicationData.AddNewLocalDrivingLicenseApplication(ApplicationID, LicenseClassID);
+             LocalDrivingLicenseApplicationID =
+                clsLocalDrivingLicenseApplicationData.AddNewLocalDrivingLicenseApplication(
+                    ApplicationID, LicenseClassID);
 
             return LocalDrivingLicenseApplicationID != -1;
         }
@@ -40,21 +42,15 @@ namespace DVLD_Buisness
         }
 
         public clsLocalDrivingLicenseApplication(int localDrivingLicenseApplicationID, int licenseClassID,
-            int applicationID, int applicantPersonID,
-        DateTime applicationDate, enApplicationTypes applicationTypeID, enApplicationStatus applicationStatus,
-        DateTime lastStatusDate, float paidFees, int createdByUserID)
+    int applicationID, int applicantPersonID,
+    DateTime applicationDate, enApplicationTypes applicationTypeID, enApplicationStatus applicationStatus,
+    DateTime lastStatusDate, float paidFees, int createdByUserID)
+    : base(applicationID, applicantPersonID, applicationDate, applicationTypeID, applicationStatus,
+           lastStatusDate, paidFees, createdByUserID)
         {
             LocalDrivingLicenseApplicationID = localDrivingLicenseApplicationID;
             LicenseClassID = licenseClassID;
-            LicenseClass = clsLicenseClass.Find(licenseClassID);
-            ApplicationID = applicationID;
-            PersonID = applicantPersonID;
-            ApplicationDate = applicationDate;
-            ApplicationTypeID = applicationTypeID;
-            Status = applicationStatus;
-            LastStatusDate = lastStatusDate;
-            PaidFees = paidFees;
-            UserID = createdByUserID;
+            LicenseClass = clsLicenseClass.FindByID(licenseClassID);
 
             _Mode = enMode.Update;
         }

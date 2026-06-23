@@ -17,8 +17,9 @@ namespace DVLD_DataAccess
         {
             bool isFound = false;
             SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
-            string query = @"select * from Applications
-                                where ApplicationID=@ApplicationID";
+            string query = @"select *
+                      from Applications
+                      where ApplicationID = @ApplicationID";
 
             SqlCommand command = new SqlCommand(query, connection);
 
@@ -37,7 +38,7 @@ namespace DVLD_DataAccess
                     ApplicantPersonID = (int)reader["ApplicantPersonID"];
                     ApplicationDate = (DateTime)reader["ApplicationDate"];
                     ApplicationTypeID = (int)reader["ApplicationTypeID"];
-                    ApplicationStatus = (int)reader["ApplicationStatus"];
+                    ApplicationStatus = Convert.ToInt32(reader["ApplicationStatus"]);
                     LastStatusDate = (DateTime)reader["LastStatusDate"];
                     PaidFees = Convert.ToSingle(reader["PaidFees"]);
                     CreatedByUserID = (int)reader["CreatedByUserID"];
@@ -250,13 +251,99 @@ namespace DVLD_DataAccess
             }
             catch
             {
-                return -1;
+                ApplicationID = -1;
             }
             finally
             {
                 connection.Close();
             }
             return ApplicationID;
+
+        }
+
+
+        public static int GetActiveApplicationIDForLicenseClass(int ApplicantPersonID, int ApplicationTypeID, int LicenseClassID)
+        {
+            int ActiveApplicationID = -1;
+
+            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
+            //  ApplicationStatus: 1=New  2=Cancelled  3=Completed
+            string query = @"select ActiveApplicationID=App.ApplicationID from Applications App
+                              join LocalDrivingLicenseApplication LDLAPP on LDLAPP.ApplicationID=App.ApplicationID
+                              where App.ApplicantPersonID=@ApplicantPersonID and
+                              App.ApplicationTypeID=@ApplicationTypeID and
+                              LDLAPP.LicenseClassID=@LicenseClassID and
+                              App.ApplicationStatus=1";
+            SqlCommand command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("@ApplicantPersonID", ApplicantPersonID);
+            command.Parameters.AddWithValue("@ApplicationTypeID", ApplicationTypeID);
+            command.Parameters.AddWithValue("@LicenseClassID", LicenseClassID);
+
+            try
+            {
+                connection.Open();
+
+                object result = command.ExecuteScalar();
+
+
+                if (result != null && int.TryParse(result.ToString(), out int insertedID))
+                {
+                    ActiveApplicationID = insertedID;
+                }
+            }
+            catch
+            {
+                ActiveApplicationID = -1;
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return ActiveApplicationID;
+
+        }
+
+
+        // For Now
+
+        public static int GetAccomplishedApplicationIDForLicenseClass(int ApplicantPersonID, int ApplicationTypeID, int LicenseClassID)
+        {
+            int ActiveApplicationID = -1;
+
+            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
+            //  ApplicationStatus: 1=New  2=Cancelled  3=Completed
+            string query = @"select ActiveApplicationID=App.ApplicationID from Applications App
+                              join LocalDrivingLicenseApplication LDLAPP on LDLAPP.ApplicationID=App.ApplicationID
+                              where App.ApplicantPersonID=@ApplicantPersonID and
+                              App.ApplicationTypeID=@ApplicationTypeID and
+                              LDLAPP.LicenseClassID=@LicenseClassID and
+                              App.ApplicationStatus=3";
+            SqlCommand command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("@ApplicantPersonID", ApplicantPersonID);
+            command.Parameters.AddWithValue("@ApplicationTypeID", ApplicationTypeID);
+            command.Parameters.AddWithValue("@LicenseClassID", LicenseClassID);
+
+            try
+            {
+                connection.Open();
+
+                object result = command.ExecuteScalar();
+
+
+                if (result != null && int.TryParse(result.ToString(), out int insertedID))
+                {
+                    ActiveApplicationID = insertedID;
+                }
+            }
+            catch
+            {
+                ActiveApplicationID = -1;
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return ActiveApplicationID;
 
         }
 
@@ -299,6 +386,9 @@ namespace DVLD_DataAccess
             return rowesAffected > 0;
 
         }
+
+
+
     }
 
 

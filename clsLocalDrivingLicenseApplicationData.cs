@@ -26,7 +26,7 @@ namespace DVLD_DataAccess
                                else 'Unknown' 
                               end
                               as [Status]
-                              from LocalDrivingLicenseApplications LDLA 
+                              from LocalDrivingLicenseApplication LDLA 
                               join LicenseClasses LC on LC.LicenseClassID=LDLA.LicenseClassID 
                               join Applications App on App.ApplicationID=LDLA.ApplicationID
                               join People P on P.PersonID=App.ApplicantPersonID
@@ -69,7 +69,7 @@ namespace DVLD_DataAccess
 
             SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
 
-            string query = @"select * from LocalDrivingLicenseApplications
+            string query = @"select ApplicationID, LicenseClassID from LocalDrivingLicenseApplication
                               where LocalDrivingLicenseApplicationID=@LocalDrivingLicenseApplicationID";
 
 
@@ -89,8 +89,8 @@ namespace DVLD_DataAccess
                     isFound = true;
 
 
-                    ApplicationID = Convert.ToInt32(reader["ApplicationID"]);
-                    LicenseClassID = Convert.ToInt32(reader["LicenseClassID"]);
+                    ApplicationID = (int)(reader["ApplicationID"]);
+                    LicenseClassID = (int)(reader["LicenseClassID"]);
 
                 }
                 else
@@ -123,7 +123,7 @@ namespace DVLD_DataAccess
 
             SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
 
-            string query = @"select * from LocalDrivingLicenseApplications
+            string query = @"select * from LocalDrivingLicenseApplication
                               where ApplicationID=@ApplicationID";
 
 
@@ -177,7 +177,7 @@ namespace DVLD_DataAccess
 
             SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
 
-            string query = @"INSERT INTO LocalDrivingLicenseApplications
+            string query = @"INSERT INTO LocalDrivingLicenseApplication
                                     (ApplicationID
                                     ,LicenseClassID)
                               VALUES
@@ -205,7 +205,7 @@ namespace DVLD_DataAccess
 
             catch (Exception ex)
             {
-                return -1;
+                LocalDrivingLicenseApplicationID= - 1;
             }
 
             finally
@@ -224,7 +224,7 @@ namespace DVLD_DataAccess
             int rowsAffected = 0;
             SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
 
-            string query = @"UPDATE LocalDrivingLicenseApplications
+            string query = @"UPDATE LocalDrivingLicenseApplication
                               SET ApplicationID = @ApplicationID
                                  ,LicenseClassID = @LicenseClassID
                             WHERE LocalDrivingLicenseApplicationID=@LocalDrivingLicenseApplicationID";
@@ -263,7 +263,7 @@ namespace DVLD_DataAccess
 
             SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
 
-            string query = @"DELETE FROM LocalDrivingLicenseApplications
+            string query = @"DELETE FROM LocalDrivingLicenseApplication
                             WHERE LocalDrivingLicenseApplicationID=@LocalDrivingLicenseApplicationID";
 
             SqlCommand command = new SqlCommand(query, connection);

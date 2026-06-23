@@ -11,11 +11,11 @@ namespace DVLD_Buisness
     public class clsLicenseClass
     {
         public int LicenseClassID { get; set; }
-        string ClassName { get; set; }
-        string ClassDescription { get; set; }
-        int MinimumAllowedAge { get; set; }
-        int DefaultValidityLength { get; set; }
-        float ClassFees { get; set; }
+        public string ClassName { get; set; }
+        public string ClassDescription { get; set; }
+        public int MinimumAllowedAge { get; set; }
+        public int DefaultValidityLength { get; set; }
+        public float ClassFees { get; set; }
 
         public clsLicenseClass()
         {

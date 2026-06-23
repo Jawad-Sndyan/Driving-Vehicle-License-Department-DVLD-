@@ -147,7 +147,6 @@ namespace DVLD_Buisness
                     if(_AddUser())
                     {
                         Mode = enMode.Update;
-                        return true;
                     }
 
                     return false;
