@@ -289,8 +289,44 @@ VALUES
 GO
 
 
+CREATE TABLE TestAppointments (
+    TestAppointmentID                INT      IDENTITY(1,1) NOT NULL,
+    TestTypeID                       INT      NOT NULL,
+    LocalDrivingLicenseApplicationID INT      NOT NULL,
+    CreatedByUserID                  INT      NOT NULL,
+    AppointmentDate                  DATETIME NOT NULL,
+    PaidFees                         SMALLMONEY NOT NULL,
+    IsLocked                         BIT      NOT NULL CONSTRAINT DF_TestAppt_IsLocked DEFAULT (0),
+    CONSTRAINT PK_TestAppointments PRIMARY KEY (TestAppointmentID),
+    CONSTRAINT FK_TestAppt_TestType
+        FOREIGN KEY (TestTypeID) REFERENCES TestTypes (TestTypeID),
+    CONSTRAINT FK_TestAppt_LDLA
+        FOREIGN KEY (LocalDrivingLicenseApplicationID) REFERENCES LocalDrivingLicenseApplication (LocalDrivingLicenseApplicationID),
+    CONSTRAINT FK_TestAppt_User
+        FOREIGN KEY (CreatedByUserID) REFERENCES Users (UserID)
+);
+GO
 
 
+INSERT INTO TestAppointments
+    (TestTypeID, LocalDrivingLicenseApplicationID, CreatedByUserID, AppointmentDate, PaidFees, IsLocked)
+VALUES
+-- LDLA 1: Sarah Walker -> Ordinary Driving License (Application completed: passed all 3 tests)
+(1, 1, 1, '2026-01-05 09:00:00', 10.00, 1),  -- Vision    - locked
+(2, 1, 1, '2026-01-12 09:30:00', 20.00, 1),  -- Written   - locked
+(3, 1, 1, '2026-01-20 10:00:00', 30.00, 1),  -- Practical - locked
+
+-- LDLA 2: Ahmad Al-Hassan -> Small Motorcycle (Application completed: passed all 3 tests)
+(1, 2, 1, '2026-01-06 09:00:00', 10.00, 1),  -- Vision    - locked
+(2, 2, 8, '2025-12-15 13:00:00', 20.00, 1),  -- Written   - locked
+(3, 2, 1, '2026-01-21 10:00:00', 30.00, 1),  -- Practical - locked
+
+-- LDLA 3: Omar Al-Rashid -> Ordinary Driving License (Application still New: in progress)
+(1, 3, 1,  '2026-02-02 09:00:00', 10.00, 1),  -- Vision  - locked
+(2, 3, 4, '2026-02-10 09:30:00', 20.00, 0),  -- Written - upcoming, not locked
+
+-- LDLA 4: Nour Al-Masri -> Ordinary Driving License (Application still New: just starting)
+(1, 4, 1,  '2026-02-03 11:00:00', 10.00, 1)  -- Vision - 1st attempt, locked
 
 
 
