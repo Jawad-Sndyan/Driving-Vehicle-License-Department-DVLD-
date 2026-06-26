@@ -1,5 +1,4 @@
 ﻿
-
 CREATE TABLE Countries (
     CountryID   INT          IDENTITY(1,1) NOT NULL,
     CountryName NVARCHAR(50) NOT NULL,
@@ -290,46 +289,164 @@ GO
 
 
 CREATE TABLE TestAppointments (
-    TestAppointmentID                INT      IDENTITY(1,1) NOT NULL,
-    TestTypeID                       INT      NOT NULL,
-    LocalDrivingLicenseApplicationID INT      NOT NULL,
-    CreatedByUserID                  INT      NOT NULL,
-    AppointmentDate                  DATETIME NOT NULL,
-    PaidFees                         SMALLMONEY NOT NULL,
-    IsLocked                         BIT      NOT NULL CONSTRAINT DF_TestAppt_IsLocked DEFAULT (0),
+    TestAppointmentID                INT            IDENTITY(1,1) NOT NULL,
+    TestTypeID                       INT            NOT NULL,
+    LocalDrivingLicenseApplicationID INT            NOT NULL,
+    AppointmentDate                  SMALLDATETIME  NOT NULL,
+    PaidFees                         SMALLMONEY     NOT NULL,
+    CreatedByUserID                  INT            NOT NULL,
+    IsLocked                         BIT            NOT NULL CONSTRAINT DF_TestAppt_IsLocked DEFAULT (0),
+    RetakeTestApplicationID          INT            NULL,
     CONSTRAINT PK_TestAppointments PRIMARY KEY (TestAppointmentID),
     CONSTRAINT FK_TestAppt_TestType
         FOREIGN KEY (TestTypeID) REFERENCES TestTypes (TestTypeID),
     CONSTRAINT FK_TestAppt_LDLA
         FOREIGN KEY (LocalDrivingLicenseApplicationID) REFERENCES LocalDrivingLicenseApplication (LocalDrivingLicenseApplicationID),
     CONSTRAINT FK_TestAppt_User
-        FOREIGN KEY (CreatedByUserID) REFERENCES Users (UserID)
+        FOREIGN KEY (CreatedByUserID) REFERENCES Users (UserID),
+    CONSTRAINT FK_TestAppt_RetakeApplication
+        FOREIGN KEY (RetakeTestApplicationID) REFERENCES Applications (ApplicationID),
 );
 GO
 
 
-INSERT INTO TestAppointments
-    (TestTypeID, LocalDrivingLicenseApplicationID, CreatedByUserID, AppointmentDate, PaidFees, IsLocked)
+-- ===========================================================================
+-- "Retake Test" Applications (ApplicationTypeID = 7).
+-- Applications currently has exactly 5 rows (IDs 1-5), so these three land
+-- on ApplicationID 6, 7, and 8.
+-- ===========================================================================
+INSERT INTO Applications
+    (ApplicantPersonID, ApplicationTypeID, ApplicationStatus, PaidFees, CreatedByUserID)
 VALUES
--- LDLA 1: Sarah Walker -> Ordinary Driving License (Application completed: passed all 3 tests)
-(1, 1, 1, '2026-01-05 09:00:00', 10.00, 1),  -- Vision    - locked
-(2, 1, 1, '2026-01-12 09:30:00', 20.00, 1),  -- Written   - locked
-(3, 1, 1, '2026-01-20 10:00:00', 30.00, 1),  -- Practical - locked
+(3, 7, 1, 5.00, 1);  -- Ahmad Al-Hassan - Retake Test request (Written) -> ApplicationID 6
+GO
+ 
+INSERT INTO Applications
+    (ApplicantPersonID, ApplicationTypeID, ApplicationStatus, PaidFees, CreatedByUserID)
+VALUES
+(4, 7, 1, 5.00, 1);  -- Omar Al-Rashid - Retake Test request (Written) -> ApplicationID 7
+GO
+ 
+INSERT INTO Applications
+    (ApplicantPersonID, ApplicationTypeID, ApplicationStatus, PaidFees, CreatedByUserID)
+VALUES
+(5, 7, 1, 5.00, 1);  -- Nour Al-Masri - Retake Test request (Vision) -> ApplicationID 8
+GO
+ 
+ 
+-- ===========================================================================
+-- LDLA 1 (ApplicationID 1, Sarah Walker, Status: Completed)
+-- Passed Vision, Written, and Practical in order. No retakes needed.
+-- ===========================================================================
+INSERT INTO TestAppointments
+    (TestTypeID, LocalDrivingLicenseApplicationID, AppointmentDate, PaidFees, CreatedByUserID, IsLocked, RetakeTestApplicationID)
+VALUES
+(1, 1, '2026-01-05 09:00:00', 10.00, 1, 1, NULL),  -- Vision    - passed, locked
+(2, 1, '2026-01-12 09:30:00', 20.00, 1, 1, NULL),  -- Written   - passed, locked
+(3, 1, '2026-01-20 10:00:00', 30.00, 1, 1, NULL);  -- Practical - passed, locked
+GO
+ 
+ 
+-- ===========================================================================
+-- LDLA 2 (ApplicationID 2, Ahmad Al-Hassan, Status: Completed)
+-- Passed Vision, then FAILED Written once before passing it on retake,
+-- then passed Practical.
+-- ===========================================================================
+INSERT INTO TestAppointments
+    (TestTypeID, LocalDrivingLicenseApplicationID, AppointmentDate, PaidFees, CreatedByUserID, IsLocked, RetakeTestApplicationID)
+VALUES
+(1, 2, '2025-12-15 13:00:00', 10.00, 1, 1, NULL);  -- Vision    - passed, locked
+GO
+ 
+INSERT INTO TestAppointments
+    (TestTypeID, LocalDrivingLicenseApplicationID, AppointmentDate, PaidFees, CreatedByUserID, IsLocked, RetakeTestApplicationID)
+VALUES
+(2, 2, '2026-01-06 09:00:00', 20.00, 1, 1, NULL);  -- Written   - 1st attempt, FAILED, locked
+GO
+ 
+INSERT INTO TestAppointments
+    (TestTypeID, LocalDrivingLicenseApplicationID, AppointmentDate, PaidFees, CreatedByUserID, IsLocked, RetakeTestApplicationID)
+VALUES
+(2, 2, '2026-01-13 09:30:00', 20.00, 1, 1, 6);     -- Written   - retake, passed, locked, linked to retake Application 6
+GO
+ 
+INSERT INTO TestAppointments
+    (TestTypeID, LocalDrivingLicenseApplicationID, AppointmentDate, PaidFees, CreatedByUserID, IsLocked, RetakeTestApplicationID)
+VALUES
+(3, 2, '2026-01-21 10:00:00', 30.00, 1, 1, NULL);  -- Practical - passed, locked
+GO
+ 
+ 
+-- ===========================================================================
+-- LDLA 3 (ApplicationID 3, Omar Al-Rashid, Status: New, in progress)
+-- Passed Vision, then FAILED Written once. A retake is booked but not yet taken.
+-- ===========================================================================
+INSERT INTO TestAppointments
+    (TestTypeID, LocalDrivingLicenseApplicationID, AppointmentDate, PaidFees, CreatedByUserID, IsLocked, RetakeTestApplicationID)
+VALUES
+(1, 3, '2026-02-02 09:00:00', 10.00, 1, 1, NULL),  -- Vision  - passed, locked
+(2, 3, '2026-02-10 09:30:00', 20.00, 1, 1, NULL);  -- Written - taken, FAILED, locked
+GO
+ 
+INSERT INTO TestAppointments
+    (TestTypeID, LocalDrivingLicenseApplicationID, AppointmentDate, PaidFees, CreatedByUserID, IsLocked, RetakeTestApplicationID)
+VALUES
+(2, 3, '2026-04-15 09:00:00', 20.00, 1, 0, 7);     -- Written - RETAKE appointment, NOT yet taken, linked to retake Application 7
+GO
+ 
+ 
+-- ===========================================================================
+-- LDLA 4 (ApplicationID 4, Nour Al-Masri, Status: New, just starting)
+-- FAILED Vision once. A retake is booked but not yet taken.
+-- ===========================================================================
+INSERT INTO TestAppointments
+    (TestTypeID, LocalDrivingLicenseApplicationID, AppointmentDate, PaidFees, CreatedByUserID, IsLocked, RetakeTestApplicationID)
+VALUES
+(1, 4, '2026-02-03 11:00:00', 10.00, 1, 1, NULL);  -- Vision - 1st attempt, FAILED, locked
+GO
+ 
+INSERT INTO TestAppointments
+    (TestTypeID, LocalDrivingLicenseApplicationID, AppointmentDate, PaidFees, CreatedByUserID, IsLocked, RetakeTestApplicationID)
+VALUES
+(1, 4, '2026-02-18 11:00:00', 10.00, 1, 0, 8);     -- Vision - RETAKE appointment, NOT yet taken, linked to retake Application 8
+GO
+ 
+ 
+-- ===========================================================================
+-- LDLA 5 (ApplicationID 5, Fatima El-Sayed, Status: Cancelled)
+-- Took Vision and Written before the application was cancelled. Never reached Practical.
+-- ===========================================================================
+INSERT INTO TestAppointments
+    (TestTypeID, LocalDrivingLicenseApplicationID, AppointmentDate, PaidFees, CreatedByUserID, IsLocked, RetakeTestApplicationID)
+VALUES
+(1, 5, '2026-01-08 08:30:00', 10.00, 1, 1, NULL),  -- Vision  - passed, locked
+(2, 5, '2026-01-09 09:00:00', 20.00, 1, 1, NULL);  -- Written - taken, locked (application cancelled afterward)
+GO
 
--- LDLA 2: Ahmad Al-Hassan -> Small Motorcycle (Application completed: passed all 3 tests)
-(1, 2, 1, '2026-01-06 09:00:00', 10.00, 1),  -- Vision    - locked
-(2, 2, 8, '2025-12-15 13:00:00', 20.00, 1),  -- Written   - locked
-(3, 2, 1, '2026-01-21 10:00:00', 30.00, 1),  -- Practical - locked
 
--- LDLA 3: Omar Al-Rashid -> Ordinary Driving License (Application still New: in progress)
-(1, 3, 1,  '2026-02-02 09:00:00', 10.00, 1),  -- Vision  - locked
-(2, 3, 4, '2026-02-10 09:30:00', 20.00, 0),  -- Written - upcoming, not locked
-
--- LDLA 4: Nour Al-Masri -> Ordinary Driving License (Application still New: just starting)
-(1, 4, 1,  '2026-02-03 11:00:00', 10.00, 1)  -- Vision - 1st attempt, locked
-
-
-
-
-
-
+UPDATE A
+SET A.ApplicationStatus = 3,          
+    A.LastStatusDate    = GETDATE()
+FROM Applications A
+JOIN LocalDrivingLicenseApplication LDLA
+    ON LDLA.ApplicationID = A.ApplicationID
+WHERE A.ApplicationStatus = 1           
+                                        
+  AND EXISTS ( 
+        SELECT 1 FROM TestAppointments TA
+        WHERE TA.LocalDrivingLicenseApplicationID = LDLA.LocalDrivingLicenseApplicationID
+          AND TA.TestTypeID = 1
+          AND TA.IsLocked = 1
+      )
+  AND EXISTS (  
+        SELECT 1 FROM TestAppointments TA
+        WHERE TA.LocalDrivingLicenseApplicationID = LDLA.LocalDrivingLicenseApplicationID
+          AND TA.TestTypeID = 2
+          AND TA.IsLocked = 1
+      )
+  AND EXISTS (  
+        SELECT 1 FROM TestAppointments TA
+        WHERE TA.LocalDrivingLicenseApplicationID = LDLA.LocalDrivingLicenseApplicationID
+          AND TA.TestTypeID = 3
+          AND TA.IsLocked = 1
+      );
