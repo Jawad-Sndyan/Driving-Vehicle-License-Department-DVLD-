@@ -450,3 +450,47 @@ WHERE A.ApplicationStatus = 1
           AND TA.TestTypeID = 3
           AND TA.IsLocked = 1
       );
+
+
+
+CREATE TABLE Tests
+(
+   TestID            INT           IDENTITY(1,1) NOT NULL,
+   TestAppointmentID INT           NOT NULL,
+   CreatedByUserID   INT           NOT NULL,
+   TestResult        BIT           NOT NULL, -- 0 Failed, 1 Passed
+   Notes             NVARCHAR(500) NULL,
+   CONSTRAINT PK_Tests PRIMARY KEY (TestID),
+   CONSTRAINT FK_Tests_TestAppointment
+       FOREIGN KEY (TestAppointmentID) REFERENCES TestAppointments (TestAppointmentID),
+   CONSTRAINT FK_Tests_CreatedByUser
+       FOREIGN KEY (CreatedByUserID) REFERENCES Users (UserID)
+);
+GO
+
+
+INSERT INTO Tests
+    (TestAppointmentID, CreatedByUserID, TestResult, Notes)
+VALUES
+-- LDLA 1: Sarah Walker — Vision, Written, Practical all passed
+(1,  1, 1, NULL),
+(2,  1, 1, NULL),
+(3,  1, 1, N'Needs improvement in parallel parking.'),
+
+-- LDLA 2: Ahmad Al-Hassan — Vision passed, Written failed then passed on retake, Practical passed
+(4,  1, 1, NULL),
+(5,  1, 0, N'Failed due to insufficient knowledge of road signs.'),
+(6,  1, 1, NULL),
+(7,  1, 1, N'Good control overall; needs improvement in reverse parking.'),
+
+-- LDLA 3: Omar Al-Rashid — Vision passed, Written failed (retake booked, not yet taken)
+(8,  1, 1, NULL),
+(9,  1, 0, N'Failed due to low score on traffic law questions.'),
+
+-- LDLA 4: Nour Al-Masri — Vision failed (retake booked, not yet taken)
+(10, 1, 0, N'Failed due to poor visual acuity in right eye; corrective lenses recommended.'),
+
+-- LDLA 5: Fatima El-Sayed — Vision passed, Written taken before cancellation
+(13, 1, 1, NULL),
+(14, 1, 1, NULL);
+GO
