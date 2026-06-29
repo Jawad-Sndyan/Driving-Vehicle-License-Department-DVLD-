@@ -14,7 +14,7 @@ namespace DVLD
     public partial class frmEditTestType : Form
     {
         private clsTestTypes _TestType;
-        private int _TestTypeID = -1;
+        private clsTestTypes.enTestType _TestTypeID;
 
         private void _LoadData()
         {
@@ -33,7 +33,7 @@ namespace DVLD
             txtTitle.Text = _TestType.TestTypeTitle.Trim(); 
             txtFees.Text= _TestType.TestTypeFees.ToString();
         }
-        public frmEditTestType(int testTypeID)
+        public frmEditTestType(clsTestTypes.enTestType testTypeID)
         {
             InitializeComponent();
             _TestTypeID= testTypeID;

@@ -55,14 +55,14 @@ namespace DVLD
 
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmEditTestType frm = new frmEditTestType(_GetSelectedApplicationTypeID());
+            frmEditTestType frm = new frmEditTestType((clsTestTypes.enTestType)_GetSelectedApplicationTypeID());
             frm.ShowDialog();
             _RefreshApplicationTypesList();
         }
 
         private void TestTypeDetailesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmTestTypeDetailes frm =new frmTestTypeDetailes(_GetSelectedApplicationTypeID());
+            frmTestTypeDetailes frm =new frmTestTypeDetailes((clsTestTypes.enTestType)_GetSelectedApplicationTypeID());
             frm.ShowDialog();
         }
     }
