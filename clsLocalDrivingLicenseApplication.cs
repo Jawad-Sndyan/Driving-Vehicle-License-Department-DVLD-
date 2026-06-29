@@ -108,6 +108,60 @@ namespace DVLD_Buisness
             return clsLocalDrivingLicenseApplicationData.DeleteLocalDrivingLicenseApplication(LocalDrivingLicenseApplicationID);
         }
 
+        public static bool DoesPassTest(int LocalDrivingLicenseApplicationID,clsTestTypes.enTestType TestTypeID)
+        {
+            return clsLocalDrivingLicenseApplicationData.DoesPassTestType(LocalDrivingLicenseApplicationID, (int)TestTypeID);
+        }
+        public bool DoesPassTest(clsTestTypes.enTestType TestTypeID)
+        {
+            return DoesPassTest(LocalDrivingLicenseApplicationID, TestTypeID);
+        }
+
+        public static bool AttendedTest(int LocalDrivingLicenseApplicationID, clsTestTypes.enTestType TestTypeID)
+        {
+            return clsLocalDrivingLicenseApplicationData.DoesAttendTestType(LocalDrivingLicenseApplicationID, (int)TestTypeID);
+        }
+
+        public bool AttendedTest(clsTestTypes.enTestType TestTypeID)
+        {
+            return AttendedTest(LocalDrivingLicenseApplicationID,TestTypeID);
+        }
+
+        public static int TotalTrialsPerTest(int LocalDrivingLicenseApplicationID, clsTestTypes.enTestType TestTypeID)
+        {
+            return clsLocalDrivingLicenseApplicationData.TotalTrialsPerTest(LocalDrivingLicenseApplicationID, (int)TestTypeID);
+        }
+
+        public  int TotalTrialsPerTest(clsTestTypes.enTestType TestTypeID)
+        {
+            return TotalTrialsPerTest(LocalDrivingLicenseApplicationID,TestTypeID);
+        }
+
+        public static bool IsThereAnActiveScheduledTest(int LocalDrivingLicenseApplicationID, clsTestTypes.enTestType TestTypeID)
+        {
+            return clsLocalDrivingLicenseApplicationData.IsThereAnActiveScheduledTest(LocalDrivingLicenseApplicationID, (int)TestTypeID);
+        }
+
+        public  bool IsThereAnActiveScheduledTest(clsTestTypes.enTestType TestTypeID)
+        {
+            return IsThereAnActiveScheduledTest(LocalDrivingLicenseApplicationID, TestTypeID);
+        }
+
+        public int GetPassedTestsCount()
+        {
+            return clsTest.GetPassedTestsCount(LocalDrivingLicenseApplicationID);
+        }
+
+        public bool PassedAllTests()
+        {
+            return clsTest.PassedAllTests(LocalDrivingLicenseApplicationID);
+        }
+
+        public clsTest FindLastTestInfoPerTestType(clsTestTypes.enTestType TestTypeID)
+        {
+            return clsTest.FindLastTestInfoForPerson(PersonID, LicenseClassID, (int)TestTypeID);
+        }
+
         public bool Save()
         {
             base._Mode = (clsApplication.enMode)_Mode;

@@ -10,18 +10,21 @@ namespace DVLD_Buisness
 {
     public class clsTestTypes
     {
-        public int TestTypeID { get; set; } 
+
+
+        public enum enTestType { VisionTest = 1, WrittenTest = 2, StreetTest = 3 };
+        public enTestType TestTypeID { get; set; } 
         public string TestTypeTitle { get; set; } 
         public string TestTypeDescription { get; set; }
          public float TestTypeFees { get; set; }    
 
-        private bool _UpdateTestType(int testTypeID, string testTypeTitle, string testTypeDescription,
+        private bool _UpdateTestType(enTestType testTypeID, string testTypeTitle, string testTypeDescription,
           float testTypeFees)
         {
-            return clsTestTypesData.UpdateTestType(testTypeID, testTypeTitle, testTypeDescription, testTypeFees);
+            return clsTestTypesData.UpdateTestType((int)testTypeID, testTypeTitle, testTypeDescription, testTypeFees);
         }
 
-        public clsTestTypes(int testTypeID, string testTypeTitle, string testTypeDescription,
+        public clsTestTypes(enTestType testTypeID, string testTypeTitle, string testTypeDescription,
           float testTypeFees)
         {
             TestTypeID=testTypeID;
@@ -35,12 +38,12 @@ namespace DVLD_Buisness
             return clsTestTypesData.GetAllTestTypes();
         }
 
-        public static clsTestTypes FindTestTypeByID(int testTypeID)
+        public static clsTestTypes FindTestTypeByID(enTestType testTypeID)
         {
             string testTypeTitle = "", testTypeDescription = "";
             float testTypeFees = -1;
 
-            bool isFound = clsTestTypesData.GetTestTypeInfoByID(testTypeID, ref testTypeTitle, ref testTypeDescription, ref testTypeFees);
+            bool isFound = clsTestTypesData.GetTestTypeInfoByID((int)testTypeID, ref testTypeTitle, ref testTypeDescription, ref testTypeFees);
 
             if (isFound)
                 return new clsTestTypes(testTypeID, testTypeTitle, testTypeDescription, testTypeFees);
