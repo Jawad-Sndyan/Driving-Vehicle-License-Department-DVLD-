@@ -113,7 +113,6 @@ namespace DVLD_DataAccess
                 }
                 else
                 {
-
                     isFound = false;
                 }
 
@@ -268,8 +267,7 @@ SELECT SCOPE_IDENTITY();";
 
             catch (Exception ex)
             {
-
-
+                PersonID = -1;
             }
 
             finally
@@ -332,7 +330,7 @@ SELECT SCOPE_IDENTITY();";
             }
             catch (Exception ex)
             {
-                return false;
+                rowsAffected = 0;
             }
 
             finally
@@ -366,7 +364,7 @@ SELECT SCOPE_IDENTITY();";
             }
             catch (Exception ex)
             {
-
+                rowsAffected = 0;
             }
             finally
             {
