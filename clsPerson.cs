@@ -42,7 +42,7 @@ namespace DVLD_Buisness
             set { _ImagePath = value; }
         }
 
-        private bool _AddNewContact()
+        private bool _AddNewPerson()
         {
             PersonID = clsPersonData.AddNewPerson(
                 NationalNo,
@@ -61,7 +61,7 @@ namespace DVLD_Buisness
             return PersonID != -1;
         }
 
-        private bool _UpdateContact()
+        private bool _UpdatePerson()
         {
             return clsPersonData.UpdatePerson(
                 PersonID,
@@ -210,7 +210,7 @@ namespace DVLD_Buisness
             switch (Mode)
             {
                 case enMode.AddNew:
-                    if (_AddNewContact())
+                    if (_AddNewPerson())
                     {
                         Mode = enMode.Update;
                         return true;
@@ -218,7 +218,7 @@ namespace DVLD_Buisness
                     return false;
 
                 case enMode.Update:
-                    return _UpdateContact();
+                    return _UpdatePerson();
             }
 
             return false;
