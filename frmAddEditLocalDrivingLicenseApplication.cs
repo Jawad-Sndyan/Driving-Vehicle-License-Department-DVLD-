@@ -43,8 +43,7 @@ namespace DVLD
                 cbLicenseClass.SelectedIndex = 2;
                 lblFees.Text = clsApplicationTypes.FindApplicationTypeByID((int)clsApplication.enApplicationTypes.New_LocalDriving_License_Service).ApplicationFees.ToString();
                 lblDate.Text = DateTime.Now.ToShortDateString();
-                //For Now
-                lblUser.Text = "jsindian";
+                lblUser.Text = clsGlobal.CurrentUser.UserName;
             }
             else
             {
@@ -128,8 +127,7 @@ namespace DVLD
             _LocalDrivingLicenseApplication.Status = clsApplication.enApplicationStatus.New;
             _LocalDrivingLicenseApplication.LastStatusDate = DateTime.Now;
             _LocalDrivingLicenseApplication.PaidFees = Convert.ToSingle(lblFees.Text);
-            //For Now
-            _LocalDrivingLicenseApplication.UserID = 1;
+            _LocalDrivingLicenseApplication.UserID = clsGlobal.CurrentUser.UserID;
             _LocalDrivingLicenseApplication.LicenseClassID = LicenceClassID;
 
 

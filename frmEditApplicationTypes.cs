@@ -15,6 +15,7 @@ namespace DVLD
     {
         private clsApplicationTypes _ApplicationType;
         private int _ApplicationTypeID = -1;
+       
 
         private void _LoadData()
         {
@@ -110,6 +111,7 @@ namespace DVLD
 
         private void btnClose_Click(object sender, EventArgs e)
         {
+            this.AutoValidate = AutoValidate.Disable;
             this.Close();
         }
 
@@ -126,7 +128,7 @@ namespace DVLD
 
             if(_ApplicationType.Save())
             {
-                MessageBox.Show("Data Saved Successfully.", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Data Saved Successfully.", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
