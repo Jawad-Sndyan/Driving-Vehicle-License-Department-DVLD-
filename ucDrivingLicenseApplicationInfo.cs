@@ -30,8 +30,7 @@ namespace DVLD
         {
             lblDLAppID.Text= LDAppID.ToString();
             lblLicenseClass.Text = _LocalDrivingLicenseApplication.LicenseClass.ClassName;
-            //For Now
-            lblPassTest.Text = "3";
+            lblPassTest.Text = _LocalDrivingLicenseApplication.GetPassedTestsCount().ToString();
             ucApplicationBasicInfo.LoadApplicationInfo(_LocalDrivingLicenseApplication.ApplicationID);
         }
 
