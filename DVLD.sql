@@ -468,29 +468,157 @@ CREATE TABLE Tests
 );
 GO
 
-
-INSERT INTO Tests
-    (TestAppointmentID, CreatedByUserID, TestResult, Notes)
+-- LDLA 1 (Sarah Walker) - TestAppointmentID 1, 2, 3 - passed all three
+INSERT INTO Tests (TestAppointmentID, CreatedByUserID, TestResult, Notes)
 VALUES
--- LDLA 1: Sarah Walker — Vision, Written, Practical all passed
-(1,  1, 1, NULL),
-(2,  1, 1, NULL),
-(3,  1, 1, N'Needs improvement in parallel parking.'),
-
--- LDLA 2: Ahmad Al-Hassan — Vision passed, Written failed then passed on retake, Practical passed
-(4,  1, 1, NULL),
-(5,  1, 0, N'Failed due to insufficient knowledge of road signs.'),
-(6,  1, 1, NULL),
-(7,  1, 1, N'Good control overall; needs improvement in reverse parking.'),
-
--- LDLA 3: Omar Al-Rashid — Vision passed, Written failed (retake booked, not yet taken)
-(8,  1, 1, NULL),
-(9,  1, 0, N'Failed due to low score on traffic law questions.'),
-
--- LDLA 4: Nour Al-Masri — Vision failed (retake booked, not yet taken)
-(10, 1, 0, N'Failed due to poor visual acuity in right eye; corrective lenses recommended.'),
-
--- LDLA 5: Fatima El-Sayed — Vision passed, Written taken before cancellation
+(1, 1, 1, NULL),
+(2, 1, 1, NULL),
+(3, 1, 1, N'Passed. Needs improvement in parallel parking.');
+GO
+ 
+-- LDLA 2 (Ahmad Al-Hassan) - TestAppointmentID 4, 5, 6, 7
+-- Vision passed; Written failed once, then passed on retake; Practical passed.
+INSERT INTO Tests (TestAppointmentID, CreatedByUserID, TestResult, Notes)
+VALUES
+(4, 1, 1, NULL),
+(5, 1, 0, N'Failed - scored below passing mark on road signs and right-of-way rules.'),
+(6, 1, 1, NULL),
+(7, 1, 1, N'Passed. Needs improvement with reverse parking in tight spaces.');
+GO
+ 
+-- LDLA 3 (Omar Al-Rashid) - TestAppointmentID 8, 9
+-- Vision passed; Written failed. Retake appointment (ID 10) not yet taken - no Tests row for it.
+INSERT INTO Tests (TestAppointmentID, CreatedByUserID, TestResult, Notes)
+VALUES
+(8, 1, 1, NULL),
+(9, 1, 0, N'Failed - did not meet the minimum score on traffic law questions.');
+GO
+ 
+-- LDLA 4 (Nour Al-Masri) - TestAppointmentID 11
+-- Vision failed. Retake appointment (ID 12) not yet taken - no Tests row for it.
+INSERT INTO Tests (TestAppointmentID, CreatedByUserID, TestResult, Notes)
+VALUES
+(11, 1, 0, N'Failed - visual acuity below the required threshold without corrective lenses.');
+GO
+ 
+-- LDLA 5 (Fatima El-Sayed) - TestAppointmentID 13, 14
+-- Vision and Written were taken (and passed) before the application was cancelled.
+INSERT INTO Tests (TestAppointmentID, CreatedByUserID, TestResult, Notes)
+VALUES
 (13, 1, 1, NULL),
 (14, 1, 1, NULL);
 GO
+
+
+
+
+CREATE TABLE Drivers (
+    DriverID        INT      IDENTITY(1,1) NOT NULL,
+    PersonID        INT      NOT NULL,
+    CreatedByUserID INT      NOT NULL,
+    CreatedDate     DATETIME NOT NULL CONSTRAINT DF_Drivers_CreatedDate DEFAULT (GETDATE()),
+    CONSTRAINT PK_Drivers PRIMARY KEY (DriverID),
+    CONSTRAINT UQ_Drivers_PersonID UNIQUE (PersonID),   -- a Person can be a Driver only once
+    CONSTRAINT FK_Drivers_Person
+        FOREIGN KEY (PersonID) REFERENCES People (PersonID),
+    CONSTRAINT FK_Drivers_CreatedByUser
+        FOREIGN KEY (CreatedByUserID) REFERENCES Users (UserID)
+);
+GO
+
+-- ===========================================================================
+-- SAMPLE DATA
+-- Only Applications 1 (Sarah Walker) and 2 (Ahmad Al-Hassan) are Completed
+-- (ApplicationStatus = 3), so only they are eligible to become Drivers/Licenses.
+-- ===========================================================================
+
+INSERT INTO Drivers (PersonID, CreatedByUserID) VALUES
+(2, 1),   -- Sarah Walker   -> DriverID 1
+(3, 1);   -- Ahmad Al-Hassan -> DriverID 2
+GO
+
+CREATE TABLE Licenses (
+    LicenseID       INT           IDENTITY(1,1) NOT NULL,
+    ApplicationID   INT           NOT NULL,
+    DriverID        INT           NOT NULL,
+    LicenseClass    INT           NOT NULL,
+    IssueDate       DATETIME      NOT NULL CONSTRAINT DF_Licenses_IssueDate DEFAULT (GETDATE()),
+    ExpirationDate  DATETIME      NOT NULL,
+    Notes           NVARCHAR(500) NULL,
+    PaidFees        SMALLMONEY    NOT NULL,
+    IsActive        BIT           NOT NULL CONSTRAINT DF_Licenses_IsActive DEFAULT (1),
+    IssueReason     TINYINT       NOT NULL CONSTRAINT DF_Licenses_IssueReason DEFAULT (1),
+        -- 1-FirstTime, 2-Renew, 3-Replacement for Damaged, 4-Replacement for Lost
+    CreatedByUserID INT           NOT NULL,
+    CONSTRAINT PK_Licenses PRIMARY KEY (LicenseID),
+    CONSTRAINT UQ_Licenses_ApplicationID UNIQUE (ApplicationID), -- one license per application
+    CONSTRAINT FK_Licenses_Application
+        FOREIGN KEY (ApplicationID) REFERENCES Applications (ApplicationID),
+    CONSTRAINT FK_Licenses_Driver
+        FOREIGN KEY (DriverID) REFERENCES Drivers (DriverID),
+    CONSTRAINT FK_Licenses_LicenseClass
+        FOREIGN KEY (LicenseClass) REFERENCES LicenseClasses (LicenseClassID),
+    CONSTRAINT FK_Licenses_CreatedByUser
+        FOREIGN KEY (CreatedByUserID) REFERENCES Users (UserID),
+    CONSTRAINT CK_Licenses_IssueReason CHECK (IssueReason IN (1,2,3,4))
+);
+GO
+
+
+
+
+-- Sarah Walker: First-time license, Class 3 (Ordinary: ClassFees 20.00,
+-- DefaultValidityLength 10 years), issued 2016-01-20.
+-- ExpirationDate = 2016-01-20 + 10 years = 2026-01-20, already in the past
+-- relative to today (2026-07-03), so it will demonstrate the expiration
+-- rule below.
+INSERT INTO Licenses
+    (ApplicationID, DriverID, LicenseClass, IssueDate, ExpirationDate,
+     Notes, PaidFees, IsActive, IssueReason, CreatedByUserID)
+VALUES
+(1, 1, 3, '2016-01-20', '2026-01-20', NULL, 20.00, 1, 1, 1);
+GO
+
+-- Ahmad Al-Hassan: First-time license, Class 1 (Small Motorcycle: ClassFees
+-- 15.00, DefaultValidityLength 5 years), issued 2026-01-21 (right after his
+-- practical test). ExpirationDate = 2026-01-21 + 5 years = 2031-01-21.
+INSERT INTO Licenses
+    (ApplicationID, DriverID, LicenseClass, IssueDate, ExpirationDate,
+     Notes, PaidFees, IsActive, IssueReason, CreatedByUserID)
+VALUES
+(2, 2, 1, '2026-01-21', '2031-01-21', NULL, 15.00, 1, 1, 1);
+GO
+
+-- ---------------------------------------------------------------------------
+-- Apply Rule 2: any License whose ExpirationDate has passed becomes inactive.
+-- (Sarah Walker's license expired 2026-01-20, so it flips to IsActive = 0.)
+-- ---------------------------------------------------------------------------
+UPDATE Licenses
+SET IsActive = 0
+WHERE ExpirationDate < GETDATE()
+  AND IsActive = 1;
+GO
+
+-- ---------------------------------------------------------------------------
+-- Sarah Walker's license is now expired/inactive, so she is eligible to use
+-- the "Renew Driving License Service" (ApplicationTypeID = 2).
+-- A renewal is completed immediately (no re-testing), so its status is set
+-- straight to Completed (3).
+-- ---------------------------------------------------------------------------
+INSERT INTO Applications
+    (ApplicantPersonID, ApplicationTypeID, ApplicationStatus, PaidFees, CreatedByUserID)
+VALUES
+(2, 2, 3, 6.00, 1);   -- Sarah Walker - Renew Driving License - Completed -> ApplicationID 9
+GO
+
+-- New License for the renewal: same Driver, same Class, IssueReason = 2 (Renew).
+-- PaidFees (20.00) and ExpirationDate (today + 10 years, Class 3) are again
+-- taken from LicenseClasses.
+INSERT INTO Licenses
+    (ApplicationID, DriverID, LicenseClass, IssueDate, ExpirationDate,
+     Notes, PaidFees, IsActive, IssueReason, CreatedByUserID)
+VALUES
+(9, 1, 3, GETDATE(), DATEADD(YEAR, 10, GETDATE()),
+ N'Renewal of expired license.', 20.00, 1, 2, 1);
+GO
+
