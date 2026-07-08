@@ -53,7 +53,7 @@ namespace DVLD
 
         private void rbDamaged_CheckedChanged(object sender, EventArgs e)
         {
-            lblTiltle.Text = "replacement for Damaged License";
+            lblTiltle.Text = "Replacement for Damaged License";
             this.Text = lblTiltle.Text;
             lblAppFees.Text=clsApplicationTypes.FindApplicationTypeByID(_GetApplicationtypeID()).ApplicationFees.ToString();
 
@@ -61,7 +61,7 @@ namespace DVLD
 
         private void rbLost_CheckedChanged(object sender, EventArgs e)
         {
-            lblTiltle.Text = "replacement for Lost License";
+            lblTiltle.Text = "Replacement for Lost License";
             this.Text = lblTiltle.Text;
             lblAppFees.Text = clsApplicationTypes.FindApplicationTypeByID(_GetApplicationtypeID()).ApplicationFees.ToString();
         }
@@ -80,7 +80,7 @@ namespace DVLD
             if (!ucDriverLicenseInfoWithFilter.SelectedLicenseInfo.IsActive)
             {
                 MessageBox.Show("Selected License is Not Active,choose another license ", "Not Allowed", MessageBoxButtons.OK);
-                btnRenew.Enabled = false;
+                btnReplacement.Enabled = false;
                 this.AutoValidate = AutoValidate.Disable;
                 this.Close();
             }
@@ -106,7 +106,7 @@ namespace DVLD
             _NewLicenseID = NewLicense.ApplicationID;
             lblRLicenseID.Text = _NewLicenseID.ToString();
 
-            btnRenew.Enabled = false;
+            btnReplacement.Enabled = false;
             ucDriverLicenseInfoWithFilter.FilterEnabled = false;
             linkLabelShowNewLicensesInfo.Enabled = true;
             MessageBox.Show("License Renewed Successfully with ID: " + _NewLicenseID.ToString(), "Success", MessageBoxButtons.OK);
