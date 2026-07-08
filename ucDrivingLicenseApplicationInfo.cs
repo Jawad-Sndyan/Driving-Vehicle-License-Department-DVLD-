@@ -72,7 +72,16 @@ namespace DVLD
 
         private void linkLabelShowLicenceInfo_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            MessageBox.Show("Will Be Implemented After Bulding Licence Class");
+            int LicenseID = _LocalDrivingLicenseApplication.GetActiveLicenceID();
+            if( LicenseID == -1 )
+            {
+                MessageBox.Show("Cannot Show License Info Local Driving License Application have been " + _LocalDrivingLicenseApplication.StatusText, "Error", MessageBoxButtons.OK);
+                return;
+            }
+
+
+            frmShowLicenseInfo frm = new frmShowLicenseInfo(LicenseID);
+            frm.ShowDialog();
         }
 
         private void ucApplicationBasicInfo_Load(object sender, EventArgs e)

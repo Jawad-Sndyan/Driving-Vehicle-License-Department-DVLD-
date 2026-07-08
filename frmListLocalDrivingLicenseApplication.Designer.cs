@@ -30,14 +30,24 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmListLocalDrivingLicenseApplication));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addNewApplicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showApplicationDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cms = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.CancelApplicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.secheduleTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sheduleVisionTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scheduleWrittenTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scheduleStreetTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dgvLDLApp = new System.Windows.Forms.DataGridView();
+            this.colLDLAppID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDrivingClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colNationalNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colFullName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPassedTests = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lblRecords = new System.Windows.Forms.Label();
             this.btnClose = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
@@ -53,12 +63,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.button2 = new System.Windows.Forms.Button();
-            this.colLDLAppID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colDrivingClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colNationalNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colFullName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colPassedTests = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.issueDrivingLicenseFirstTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cms.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLDLApp)).BeginInit();
             this.groupBox7.SuspendLayout();
@@ -71,7 +76,7 @@
             // 
             this.editToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("editToolStripMenuItem.Image")));
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(368, 40);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(444, 40);
             this.editToolStripMenuItem.Text = "Edit Appliaction";
             this.editToolStripMenuItem.Click += new System.EventHandler(this.editToolStripMenuItem_Click);
             // 
@@ -79,7 +84,7 @@
             // 
             this.addNewApplicationToolStripMenuItem.Image = global::DVLD.Properties.Resources.New_Application_64;
             this.addNewApplicationToolStripMenuItem.Name = "addNewApplicationToolStripMenuItem";
-            this.addNewApplicationToolStripMenuItem.Size = new System.Drawing.Size(368, 40);
+            this.addNewApplicationToolStripMenuItem.Size = new System.Drawing.Size(444, 40);
             this.addNewApplicationToolStripMenuItem.Text = "Add New Application";
             this.addNewApplicationToolStripMenuItem.Click += new System.EventHandler(this.addNewApplicationToolStripMenuItem_Click);
             // 
@@ -87,7 +92,7 @@
             // 
             this.showApplicationDetailsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showApplicationDetailsToolStripMenuItem.Image")));
             this.showApplicationDetailsToolStripMenuItem.Name = "showApplicationDetailsToolStripMenuItem";
-            this.showApplicationDetailsToolStripMenuItem.Size = new System.Drawing.Size(368, 40);
+            this.showApplicationDetailsToolStripMenuItem.Size = new System.Drawing.Size(444, 40);
             this.showApplicationDetailsToolStripMenuItem.Text = "Show Application Details";
             this.showApplicationDetailsToolStripMenuItem.Click += new System.EventHandler(this.showApplicationDetailsToolStripMenuItem_Click);
             // 
@@ -99,18 +104,59 @@
             this.showApplicationDetailsToolStripMenuItem,
             this.addNewApplicationToolStripMenuItem,
             this.editToolStripMenuItem,
-            this.CancelApplicationToolStripMenuItem});
+            this.CancelApplicationToolStripMenuItem,
+            this.secheduleTestToolStripMenuItem,
+            this.issueDrivingLicenseFirstTimeToolStripMenuItem});
             this.cms.Name = "contextMenuStrip1";
             this.cms.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.cms.Size = new System.Drawing.Size(369, 164);
+            this.cms.Size = new System.Drawing.Size(445, 288);
+            this.cms.Opening += new System.ComponentModel.CancelEventHandler(this.cms_Opening);
             // 
             // CancelApplicationToolStripMenuItem
             // 
             this.CancelApplicationToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("CancelApplicationToolStripMenuItem.Image")));
             this.CancelApplicationToolStripMenuItem.Name = "CancelApplicationToolStripMenuItem";
-            this.CancelApplicationToolStripMenuItem.Size = new System.Drawing.Size(368, 40);
+            this.CancelApplicationToolStripMenuItem.Size = new System.Drawing.Size(444, 40);
             this.CancelApplicationToolStripMenuItem.Text = "Cancel Application";
             this.CancelApplicationToolStripMenuItem.Click += new System.EventHandler(this.CancelApplicationToolStripMenuItem_Click);
+            // 
+            // secheduleTestToolStripMenuItem
+            // 
+            this.secheduleTestToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sheduleVisionTestToolStripMenuItem,
+            this.scheduleWrittenTestToolStripMenuItem,
+            this.scheduleStreetTestToolStripMenuItem});
+            this.secheduleTestToolStripMenuItem.Image = global::DVLD.Properties.Resources.Schedule_Test_32;
+            this.secheduleTestToolStripMenuItem.Name = "secheduleTestToolStripMenuItem";
+            this.secheduleTestToolStripMenuItem.Size = new System.Drawing.Size(444, 40);
+            this.secheduleTestToolStripMenuItem.Text = "Sechedule Test";
+            // 
+            // sheduleVisionTestToolStripMenuItem
+            // 
+            this.sheduleVisionTestToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(140)))), ((int)(((byte)(200)))));
+            this.sheduleVisionTestToolStripMenuItem.Image = global::DVLD.Properties.Resources.Vision_Test_32;
+            this.sheduleVisionTestToolStripMenuItem.Name = "sheduleVisionTestToolStripMenuItem";
+            this.sheduleVisionTestToolStripMenuItem.Size = new System.Drawing.Size(380, 44);
+            this.sheduleVisionTestToolStripMenuItem.Text = "Shedule Vision Test";
+            this.sheduleVisionTestToolStripMenuItem.Click += new System.EventHandler(this.sheduleVisionTestToolStripMenuItem_Click);
+            // 
+            // scheduleWrittenTestToolStripMenuItem
+            // 
+            this.scheduleWrittenTestToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(140)))), ((int)(((byte)(200)))));
+            this.scheduleWrittenTestToolStripMenuItem.Image = global::DVLD.Properties.Resources.Written_Test_32;
+            this.scheduleWrittenTestToolStripMenuItem.Name = "scheduleWrittenTestToolStripMenuItem";
+            this.scheduleWrittenTestToolStripMenuItem.Size = new System.Drawing.Size(380, 44);
+            this.scheduleWrittenTestToolStripMenuItem.Text = "Schedule Written Test";
+            this.scheduleWrittenTestToolStripMenuItem.Click += new System.EventHandler(this.scheduleWrittenTestToolStripMenuItem_Click);
+            // 
+            // scheduleStreetTestToolStripMenuItem
+            // 
+            this.scheduleStreetTestToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(140)))), ((int)(((byte)(200)))));
+            this.scheduleStreetTestToolStripMenuItem.Image = global::DVLD.Properties.Resources.Street_Test_32;
+            this.scheduleStreetTestToolStripMenuItem.Name = "scheduleStreetTestToolStripMenuItem";
+            this.scheduleStreetTestToolStripMenuItem.Size = new System.Drawing.Size(380, 44);
+            this.scheduleStreetTestToolStripMenuItem.Text = "Schedule Street Test";
+            this.scheduleStreetTestToolStripMenuItem.Click += new System.EventHandler(this.scheduleStreetTestToolStripMenuItem_Click);
             // 
             // dgvLDLApp
             // 
@@ -120,14 +166,14 @@
             this.dgvLDLApp.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(25)))), ((int)(((byte)(53)))));
             this.dgvLDLApp.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvLDLApp.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(25)))), ((int)(((byte)(53)))));
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(140)))), ((int)(((byte)(200)))));
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(75)))), ((int)(((byte)(140)))));
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvLDLApp.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(25)))), ((int)(((byte)(53)))));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(140)))), ((int)(((byte)(200)))));
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(75)))), ((int)(((byte)(140)))));
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvLDLApp.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvLDLApp.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvLDLApp.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colLDLAppID,
@@ -137,14 +183,14 @@
             this.colPassedTests,
             this.colStatus});
             this.dgvLDLApp.ContextMenuStrip = this.cms;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(20)))), ((int)(((byte)(45)))));
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.LightPink;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(35)))), ((int)(((byte)(60)))));
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvLDLApp.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(20)))), ((int)(((byte)(45)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.LightPink;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(35)))), ((int)(((byte)(60)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvLDLApp.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgvLDLApp.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvLDLApp.EnableHeadersVisualStyles = false;
             this.dgvLDLApp.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(35)))), ((int)(((byte)(60)))));
@@ -157,6 +203,54 @@
             this.dgvLDLApp.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvLDLApp.Size = new System.Drawing.Size(2324, 713);
             this.dgvLDLApp.TabIndex = 11;
+            // 
+            // colLDLAppID
+            // 
+            this.colLDLAppID.HeaderText = "L.D.L.AppID";
+            this.colLDLAppID.MinimumWidth = 10;
+            this.colLDLAppID.Name = "colLDLAppID";
+            this.colLDLAppID.ReadOnly = true;
+            this.colLDLAppID.Width = 200;
+            // 
+            // colDrivingClass
+            // 
+            this.colDrivingClass.HeaderText = "Driving Class";
+            this.colDrivingClass.MinimumWidth = 10;
+            this.colDrivingClass.Name = "colDrivingClass";
+            this.colDrivingClass.ReadOnly = true;
+            this.colDrivingClass.Width = 300;
+            // 
+            // colNationalNo
+            // 
+            this.colNationalNo.HeaderText = "National No.";
+            this.colNationalNo.MinimumWidth = 10;
+            this.colNationalNo.Name = "colNationalNo";
+            this.colNationalNo.ReadOnly = true;
+            this.colNationalNo.Width = 200;
+            // 
+            // colFullName
+            // 
+            this.colFullName.HeaderText = "Full Name";
+            this.colFullName.MinimumWidth = 10;
+            this.colFullName.Name = "colFullName";
+            this.colFullName.ReadOnly = true;
+            this.colFullName.Width = 300;
+            // 
+            // colPassedTests
+            // 
+            this.colPassedTests.HeaderText = "Passed Tests";
+            this.colPassedTests.MinimumWidth = 10;
+            this.colPassedTests.Name = "colPassedTests";
+            this.colPassedTests.ReadOnly = true;
+            this.colPassedTests.Width = 110;
+            // 
+            // colStatus
+            // 
+            this.colStatus.HeaderText = "Status";
+            this.colStatus.MinimumWidth = 10;
+            this.colStatus.Name = "colStatus";
+            this.colStatus.ReadOnly = true;
+            this.colStatus.Width = 150;
             // 
             // lblRecords
             // 
@@ -349,52 +443,13 @@
             this.button2.TabIndex = 2;
             this.button2.UseVisualStyleBackColor = true;
             // 
-            // colLDLAppID
+            // issueDrivingLicenseFirstTimeToolStripMenuItem
             // 
-            this.colLDLAppID.HeaderText = "L.D.L.AppID";
-            this.colLDLAppID.MinimumWidth = 10;
-            this.colLDLAppID.Name = "colLDLAppID";
-            this.colLDLAppID.ReadOnly = true;
-            // 
-            // colDrivingClass
-            // 
-            this.colDrivingClass.HeaderText = "Driving Class";
-            this.colDrivingClass.MinimumWidth = 10;
-            this.colDrivingClass.Name = "colDrivingClass";
-            this.colDrivingClass.ReadOnly = true;
-            this.colDrivingClass.Width = 300;
-            // 
-            // colNationalNo
-            // 
-            this.colNationalNo.HeaderText = "National No.";
-            this.colNationalNo.MinimumWidth = 10;
-            this.colNationalNo.Name = "colNationalNo";
-            this.colNationalNo.ReadOnly = true;
-            this.colNationalNo.Width = 200;
-            // 
-            // colFullName
-            // 
-            this.colFullName.HeaderText = "Full Name";
-            this.colFullName.MinimumWidth = 10;
-            this.colFullName.Name = "colFullName";
-            this.colFullName.ReadOnly = true;
-            this.colFullName.Width = 300;
-            // 
-            // colPassedTests
-            // 
-            this.colPassedTests.HeaderText = "Passed Tests";
-            this.colPassedTests.MinimumWidth = 10;
-            this.colPassedTests.Name = "colPassedTests";
-            this.colPassedTests.ReadOnly = true;
-            this.colPassedTests.Width = 110;
-            // 
-            // colStatus
-            // 
-            this.colStatus.HeaderText = "Status";
-            this.colStatus.MinimumWidth = 10;
-            this.colStatus.Name = "colStatus";
-            this.colStatus.ReadOnly = true;
-            this.colStatus.Width = 150;
+            this.issueDrivingLicenseFirstTimeToolStripMenuItem.Image = global::DVLD.Properties.Resources.License_View_32;
+            this.issueDrivingLicenseFirstTimeToolStripMenuItem.Name = "issueDrivingLicenseFirstTimeToolStripMenuItem";
+            this.issueDrivingLicenseFirstTimeToolStripMenuItem.Size = new System.Drawing.Size(444, 40);
+            this.issueDrivingLicenseFirstTimeToolStripMenuItem.Text = "Issue Driving License(First Time)";
+            this.issueDrivingLicenseFirstTimeToolStripMenuItem.Click += new System.EventHandler(this.issueDrivingLicenseFirstTimeToolStripMenuItem_Click);
             // 
             // frmListLocalDrivingLicenseApplication
             // 
@@ -449,11 +504,16 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.ToolStripMenuItem secheduleTestToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sheduleVisionTestToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scheduleWrittenTestToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scheduleStreetTestToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn colLDLAppID;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDrivingClass;
         private System.Windows.Forms.DataGridViewTextBoxColumn colNationalNo;
         private System.Windows.Forms.DataGridViewTextBoxColumn colFullName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colPassedTests;
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
+        private System.Windows.Forms.ToolStripMenuItem issueDrivingLicenseFirstTimeToolStripMenuItem;
     }
 }

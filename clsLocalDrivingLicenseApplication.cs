@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static DVLD_Buisness.clsLicense;
 
 namespace DVLD_Buisness
 {
@@ -160,6 +161,64 @@ namespace DVLD_Buisness
         public clsTest FindLastTestInfoPerTestType(clsTestTypes.enTestType TestTypeID)
         {
             return clsTest.FindLastTestInfoForPerson(PersonID, LicenseClassID, (int)TestTypeID);
+        }
+
+        public int GetActiveLicenceID()
+        {
+            return clsLicense.GetActiveLicenseIDByPersonID(PersonID, LicenseClassID);
+        }
+        public int IssueLicenceForTheFirstTime(string Notes,int CreatedByUserID)
+        {
+            int DriverID = -1;
+
+            clsDriver Driver = clsDriver.FindDriverInfoByPersonID(PersonID);
+
+            if (Driver==null)
+            {
+                Driver=new clsDriver();
+                Driver.PersonID = PersonID;
+                Driver.CreatedDate=DateTime.Now;
+                Driver.CreatedByUserID = CreatedByUserID;
+
+                if (Driver.Save())
+                {
+                    DriverID = Driver.DriverID;
+                }
+                else
+                    return -1;
+            }
+            else
+            {
+                DriverID = Driver.DriverID;
+            }
+
+            clsLicense NewLicense = new clsLicense();
+            NewLicense.ApplicationID = ApplicationID;
+            NewLicense.DriverID = DriverID;
+            NewLicense.LicenseClassID = LicenseClassID;
+            NewLicense.IssueDate = DateTime.Now;
+
+            int ValidityLength = clsLicenseClass.FindByID(LicenseClassID).DefaultValidityLength;
+            NewLicense.ExpirationDate = DateTime.Now.AddYears(ValidityLength);
+            NewLicense.Notes = Notes;
+            NewLicense.PaidFees = LicenseClass.ClassFees;
+            NewLicense.IsActive = true;
+            NewLicense.IssueReason = clsLicense.enIssueReason.FirstTime;
+            NewLicense.CreatedByUserID = CreatedByUserID;
+
+            if (NewLicense.Save())
+            {
+                this.Complete();    
+
+                return NewLicense.LicenseID;
+            }
+
+            return -1;
+        }
+
+        public bool IsLicenseIssued()
+        {
+            return GetActiveLicenceID() != -1;
         }
 
         public bool Save()

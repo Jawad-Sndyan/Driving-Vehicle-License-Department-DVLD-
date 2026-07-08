@@ -95,6 +95,7 @@ namespace DVLD
         {
             InitializeComponent();
             _SetupDataGridView();
+            _RefreshLocalDrivingLicenseApplicationsList();
         }
 
         private void frmListLocalDrivingLicenseApplication_Load(object sender, EventArgs e)
@@ -217,6 +218,66 @@ namespace DVLD
                 _RefreshLocalDrivingLicenseApplicationsList();
             }
 
+        }
+
+        private void cms_Opening(object sender, CancelEventArgs e)
+        {
+            int LocalDrivingLicenseApplicationID = _GetSelectedLocalDrivingLicenseApplication();
+
+            clsLocalDrivingLicenseApplication LocalDrivingLicenseApplication = clsLocalDrivingLicenseApplication.FindLocalDrivingLicenseApplicationInfoByID(LocalDrivingLicenseApplicationID);
+
+
+            int TotalPassedTests= (int)dgvLDLApp.CurrentRow.Cells[4].Value;
+            bool DoesPassAllTest = (TotalPassedTests == 3);
+
+            issueDrivingLicenseFirstTimeToolStripMenuItem.Enabled = DoesPassAllTest && (LocalDrivingLicenseApplication.Status == clsApplication.enApplicationStatus.New);
+
+            bool DoesPassVisionTest= LocalDrivingLicenseApplication.DoesPassTest(clsTestTypes.enTestType.VisionTest);
+            bool DoesPassWritenTest= LocalDrivingLicenseApplication.DoesPassTest(clsTestTypes.enTestType.WrittenTest);
+            bool DoesPassStreetTest = LocalDrivingLicenseApplication.DoesPassTest(clsTestTypes.enTestType.StreetTest);
+
+            secheduleTestToolStripMenuItem.Enabled = ((!DoesPassVisionTest || !DoesPassWritenTest || !DoesPassStreetTest) && LocalDrivingLicenseApplication.Status == clsApplication.enApplicationStatus.New);
+
+            if(secheduleTestToolStripMenuItem.Enabled)
+            {
+                sheduleVisionTestToolStripMenuItem.Enabled = !DoesPassVisionTest;
+
+                scheduleWrittenTestToolStripMenuItem.Enabled = DoesPassVisionTest && !DoesPassWritenTest;
+
+                scheduleStreetTestToolStripMenuItem.Enabled = DoesPassVisionTest && DoesPassWritenTest && !DoesPassStreetTest;
+            }
+
+            CancelApplicationToolStripMenuItem.Enabled = (LocalDrivingLicenseApplication.Status == clsApplication.enApplicationStatus.New);
+            editToolStripMenuItem.Enabled = (LocalDrivingLicenseApplication.Status == clsApplication.enApplicationStatus.New);
+        }
+
+        private void sheduleVisionTestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmListTestAppointments frm = new frmListTestAppointments(_GetSelectedLocalDrivingLicenseApplication(),clsTestTypes.enTestType.VisionTest);
+            frm.ShowDialog();
+            _RefreshLocalDrivingLicenseApplicationsList();
+        }
+
+        private void scheduleWrittenTestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmListTestAppointments frm = new frmListTestAppointments(_GetSelectedLocalDrivingLicenseApplication(), clsTestTypes.enTestType.WrittenTest);
+            frm.ShowDialog();
+            _RefreshLocalDrivingLicenseApplicationsList();
+        }
+
+        private void scheduleStreetTestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmListTestAppointments frm = new frmListTestAppointments(_GetSelectedLocalDrivingLicenseApplication(), clsTestTypes.enTestType.StreetTest);
+            frm.ShowDialog();
+            _RefreshLocalDrivingLicenseApplicationsList();
+
+        }
+
+        private void issueDrivingLicenseFirstTimeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmIssueLicenseForTheFirstTime frm=new frmIssueLicenseForTheFirstTime(_GetSelectedLocalDrivingLicenseApplication());
+            frm.ShowDialog();
+            _RefreshLocalDrivingLicenseApplicationsList();
         }
     }
 }
