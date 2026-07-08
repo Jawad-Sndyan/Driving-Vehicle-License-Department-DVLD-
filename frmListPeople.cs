@@ -31,7 +31,6 @@ namespace DVLD
         private void _LoadSearchComboBox()
         {
 
-            cbSearch.Items.Clear();
             switch (cbFilter.Text)
             {
                 case "Gendor":
@@ -39,6 +38,7 @@ namespace DVLD
                     break;
 
                 case "Nationality":
+                    cbSearch.Items.Clear();
                     DataTable dtCountries = clsCountry.GetAllCountries();
                     foreach (DataRow row in dtCountries.Rows)
                         cbSearch.Items.Add(row["CountryName"].ToString());
@@ -124,6 +124,8 @@ namespace DVLD
         {
             _dtPeople = clsPerson.GetAllPeople();
             dgvPeople.DataSource = _dtPeople;
+            DataView dv = _dtPeople.DefaultView;
+            lblRecords.Text = dv.Count.ToString();
         }
 
 
@@ -216,6 +218,7 @@ namespace DVLD
 
         private void btnClose_Click(object sender, EventArgs e)
         {
+            this.AutoValidate= AutoValidate.Disable;
             this.Close();
         }
 
