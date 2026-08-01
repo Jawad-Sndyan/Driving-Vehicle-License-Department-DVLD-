@@ -45,6 +45,7 @@ namespace DVLD
         private void frmReplaceLostOrDamagedLicense_Load(object sender, EventArgs e)
         {
             btnReplacement.Enabled = false;
+            linkLabelShowNewLicensesInfo.Enabled = false;
             lblAppDate.Text = DateTime.Now.ToShortDateString();
             lblUser.Text=clsGlobal.CurrentUser.UserName;
 
@@ -115,6 +116,12 @@ namespace DVLD
         private void linkLabelShowNewLicensesInfo_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             frmShowLicenseInfo frm = new frmShowLicenseInfo(_NewLicenseID);
+            frm.ShowDialog();
+        }
+
+        private void linkLabelShowLicenseHistory_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            frmShowPersonLicenseHistory frm = new frmShowPersonLicenseHistory(ucDriverLicenseInfoWithFilter.SelectedLicenseInfo.Driver.PersonID);
             frm.ShowDialog();
         }
     }

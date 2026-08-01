@@ -106,6 +106,7 @@
             this.linkLabelShowLicenseHistory.TabStop = true;
             this.linkLabelShowLicenseHistory.Text = "Show License History ";
             this.linkLabelShowLicenseHistory.VisitedLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(196)))), ((int)(((byte)(161)))), ((int)(((byte)(255)))));
+            this.linkLabelShowLicenseHistory.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelShowLicenseHistory_LinkClicked);
             // 
             // linkLabelShowNewLicensesInfo
             // 

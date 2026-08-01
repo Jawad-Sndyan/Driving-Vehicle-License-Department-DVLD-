@@ -63,9 +63,7 @@ namespace DVLD
             lblDOB.Text= _License.Driver.Person.DateOfBirth.ToShortDateString().Trim();
             lblDriverID.Text= _License.Driver.DriverID.ToString().Trim();
             lblExpirationDate.Text= _License.ExpirationDate.ToShortDateString().Trim();
-            //For Now
-            bool De = true;
-            lblIsDetained.Text = (De == true) ? "Yes" : "No";
+            lblIsDetained.Text = (_License.IsDetained == true) ? "Yes" : "No";
 
             _LoadPersonImage();
         }

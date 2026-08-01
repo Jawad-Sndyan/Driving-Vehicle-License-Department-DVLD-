@@ -220,5 +220,11 @@ namespace DVLD
         {
 
         }
+
+        private void linkLabelShowLicenseHistory_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            frmShowPersonLicenseHistory frm=new frmShowPersonLicenseHistory(ucDriverLicenseInfoWithFilter.SelectedLicenseInfo.Driver.PersonID);
+            frm.ShowDialog();
+        }
     }
 }
