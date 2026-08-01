@@ -340,7 +340,7 @@ namespace DVLD_DataAccess
             SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
 
             string query = @"Update Licenses
-                             Set IsActive=1
+                             Set IsActive=0
                              where LicenseID=@LicenseID";
                              
             SqlCommand command = new SqlCommand(query, connection);
