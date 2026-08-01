@@ -622,3 +622,127 @@ VALUES
  N'Renewal of expired license.', 20.00, 1, 2, 1);
 GO
 
+CREATE TABLE DetainedLicenses (
+    DetainID              INT           IDENTITY(1,1) NOT NULL,
+    LicenseID             INT           NOT NULL,
+    DetainDate            SMALLDATETIME NOT NULL,
+    FineFees              SMALLMONEY    NOT NULL,
+    CreatedByUserID       INT           NOT NULL,
+    IsReleased            BIT           NOT NULL CONSTRAINT DF_Detained_IsReleased DEFAULT (0),
+    ReleaseDate           SMALLDATETIME NULL,
+    ReleasedByUserID      INT           NULL,
+    ReleaseApplicationID  INT           NULL,
+    CONSTRAINT PK_DetainedLicenses PRIMARY KEY (DetainID),
+    CONSTRAINT FK_Detained_License
+        FOREIGN KEY (LicenseID) REFERENCES Licenses (LicenseID),
+    CONSTRAINT FK_Detained_CreatedByUser
+        FOREIGN KEY (CreatedByUserID) REFERENCES Users (UserID),
+    CONSTRAINT FK_Detained_ReleasedByUser
+        FOREIGN KEY (ReleasedByUserID) REFERENCES Users (UserID),
+    CONSTRAINT FK_Detained_ReleaseApplication
+        FOREIGN KEY (ReleaseApplicationID) REFERENCES Applications (ApplicationID),
+    CONSTRAINT CK_Detained_ReleaseConsistency CHECK (
+        (IsReleased = 0 AND ReleaseDate IS NULL AND ReleasedByUserID IS NULL AND ReleaseApplicationID IS NULL)
+        OR
+        (IsReleased = 1 AND ReleaseDate IS NOT NULL AND ReleasedByUserID IS NOT NULL AND ReleaseApplicationID IS NOT NULL)
+    )
+);
+GO
+
+
+-- ===========================================================================
+-- SAMPLE DATA
+-- Case 1: Ahmad Al-Hassan's motorcycle license (LicenseID 2) was detained for
+-- a traffic violation, then released after he applied for
+-- "Release Detained Driving License" (ApplicationTypeID = 5).
+-- ===========================================================================
+
+-- The release application (Completed), which will be referenced by the
+-- DetainedLicenses row below -> becomes ApplicationID 10.
+INSERT INTO Applications
+    (ApplicantPersonID, ApplicationTypeID, ApplicationStatus, PaidFees, CreatedByUserID)
+VALUES
+(3, 5, 3, 15.00, 1);  -- Ahmad Al-Hassan - Release Detained Driving License - Completed -> ApplicationID 10
+GO
+
+INSERT INTO DetainedLicenses
+    (LicenseID, DetainDate, FineFees, CreatedByUserID,
+     IsReleased, ReleaseDate, ReleasedByUserID, ReleaseApplicationID)
+VALUES
+(2, '2026-03-05 10:15:00', 15.00, 1,
+ 1, '2026-03-20 14:30:00', 1, 10);  -- Ahmad's license: detained then released
+GO
+
+
+-- ===========================================================================
+-- Case 2: Sarah Walker's renewed license (LicenseID 3) is currently detained
+-- and has not been released yet.
+-- ===========================================================================
+INSERT INTO DetainedLicenses
+    (LicenseID, DetainDate, FineFees, CreatedByUserID,
+     IsReleased, ReleaseDate, ReleasedByUserID, ReleaseApplicationID)
+VALUES
+(3, '2026-05-10 09:00:00', 20.00, 1,
+ 0, NULL, NULL, NULL);  -- Sarah's license: still detained, not yet released
+GO
+
+
+CREATE TABLE InternationalLicenses (
+    InternationalLicenseID   INT      IDENTITY(1,1) NOT NULL,
+    ApplicationID            INT      NOT NULL,
+    DriverID                 INT      NOT NULL,
+    IssuedUsingLocalLicenseID INT     NOT NULL,
+    IssueDate                DATETIME NOT NULL CONSTRAINT DF_IntlLic_IssueDate DEFAULT (GETDATE()),
+    ExpirationDate            DATETIME NOT NULL,
+    IsActive                  BIT      NOT NULL CONSTRAINT DF_IntlLic_IsActive DEFAULT (1),
+    CreatedByUserID           INT      NOT NULL,
+    CONSTRAINT PK_InternationalLicenses PRIMARY KEY (InternationalLicenseID),
+    CONSTRAINT UQ_IntlLic_ApplicationID UNIQUE (ApplicationID),  -- one international license per application
+    CONSTRAINT FK_IntlLic_Application
+        FOREIGN KEY (ApplicationID) REFERENCES Applications (ApplicationID),
+    CONSTRAINT FK_IntlLic_Driver
+        FOREIGN KEY (DriverID) REFERENCES Drivers (DriverID),
+    CONSTRAINT FK_IntlLic_LocalLicense
+        FOREIGN KEY (IssuedUsingLocalLicenseID) REFERENCES Licenses (LicenseID),
+    CONSTRAINT FK_IntlLic_CreatedByUser
+        FOREIGN KEY (CreatedByUserID) REFERENCES Users (UserID)
+);
+GO
+
+
+-- ===========================================================================
+-- SAMPLE DATA
+-- An International License can only be issued to someone who is already a
+-- Driver with a valid (active) local license. Eligible candidates:
+--   DriverID 1 = Sarah Walker  -> active local License = LicenseID 3 (renewal)
+--   DriverID 2 = Ahmad Al-Hassan -> active local License = LicenseID 2
+-- ===========================================================================
+
+-- Case 1: Ahmad Al-Hassan applies for and receives an International License,
+-- based on his active local motorcycle license (LicenseID 2).
+INSERT INTO Applications
+    (ApplicantPersonID, ApplicationTypeID, ApplicationStatus, PaidFees, CreatedByUserID)
+VALUES
+(3, 6, 3, 50.00, 1);  -- Ahmad Al-Hassan - New International License - Completed -> ApplicationID 11
+GO
+
+INSERT INTO InternationalLicenses
+    (ApplicationID, DriverID, IssuedUsingLocalLicenseID, IssueDate, ExpirationDate, IsActive, CreatedByUserID)
+VALUES
+(11, 2, 2, '2026-02-10', '2029-02-10', 1, 1);  -- valid for 3 years, still active
+GO
+
+
+-- Case 2: Sarah Walker applies for and receives an International License,
+-- based on her renewed local license (LicenseID 3), but hers has since expired.
+INSERT INTO Applications
+    (ApplicantPersonID, ApplicationTypeID, ApplicationStatus, PaidFees, CreatedByUserID)
+VALUES
+(2, 6, 3, 50.00, 1);  -- Sarah Walker - New International License - Completed -> ApplicationID 12
+GO
+
+INSERT INTO InternationalLicenses
+    (ApplicationID, DriverID, IssuedUsingLocalLicenseID, IssueDate, ExpirationDate, IsActive, CreatedByUserID)
+VALUES
+(12, 1, 3, '2023-01-25', '2026-01-25', 0, 1);  -- expired, flagged inactive
+GO
