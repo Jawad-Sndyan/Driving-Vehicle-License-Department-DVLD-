@@ -39,6 +39,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.chkRememberMe = new System.Windows.Forms.CheckBox();
             this.btnLogin = new System.Windows.Forms.Button();
+            this.btnClose = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -166,12 +167,24 @@
             this.btnLogin.UseVisualStyleBackColor = true;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
+            // btnClose
+            // 
+            this.btnClose.BackgroundImage = global::DVLD.Properties.Resources.CloseBlack;
+            this.btnClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnClose.Location = new System.Drawing.Point(1275, 0);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(60, 60);
+            this.btnClose.TabIndex = 68;
+            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            // 
             // frmLoginScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(25)))), ((int)(((byte)(53)))));
             this.ClientSize = new System.Drawing.Size(1335, 913);
+            this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnLogin);
             this.Controls.Add(this.chkRememberMe);
             this.Controls.Add(this.txtPassword);
@@ -184,6 +197,7 @@
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.splitter1);
             this.ForeColor = System.Drawing.Color.LightPink;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "frmLoginScreen";
             this.Text = "frmLoginScreen";
             this.Load += new System.EventHandler(this.frmLoginScreen_Load);
@@ -208,5 +222,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox chkRememberMe;
         private System.Windows.Forms.Button btnLogin;
+        private System.Windows.Forms.Button btnClose;
     }
 }

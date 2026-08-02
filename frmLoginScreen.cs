@@ -49,7 +49,9 @@ namespace DVLD
 
                 clsGlobal.CurrentUser = User;
                 this.Hide();
-                MessageBox.Show("Sucsess");
+                frmMainScreen frm = new frmMainScreen(this);
+                frm.Show();
+
 
             }
             else
@@ -70,6 +72,12 @@ namespace DVLD
             }
             else
                 chkRememberMe.Checked = false;  
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.AutoValidate=AutoValidate.Disable;
+            this.Close();
         }
     }
 }
