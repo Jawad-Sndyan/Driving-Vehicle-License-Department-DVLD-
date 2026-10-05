@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Win32;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,8 @@ namespace DVLD_Buisness
     public class clsGlobal
     {
         public static clsUser CurrentUser { get; set; }
+
+        private static readonly string FilePathRegistry = @"HKEY_CURRENT_USER\Software\AlJawadProgrames\DVLD\Credentials";
 
         private static readonly string FilePath = @"F:\credentials.txt";
 
@@ -47,6 +50,21 @@ namespace DVLD_Buisness
             return true;
         }
 
+
+        public static bool SaveCredentialsToRegistry(string username, string password)
+        {
+            try
+            {
+                Registry.SetValue(FilePathRegistry, "User Name", clsUtil.Encrypt(username), RegistryValueKind.String);
+                Registry.SetValue(FilePathRegistry, "Password", clsUtil.Encrypt(password), RegistryValueKind.String);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return true;
+        }
         public static bool RetrieveCredentials(ref string username, ref string password)
         {
             if (!File.Exists(FilePath))
@@ -59,6 +77,31 @@ namespace DVLD_Buisness
                 else if (line.StartsWith("Password="))
                     password = clsUtil.Decrypt(line.Substring("Password=".Length)).Trim(); 
             }
+
+            return true;
+        }
+
+        public static bool RetrieveCredentialsFromRegistry(ref string username, ref string password)
+        {
+            string Username, Password;
+
+            try
+            {
+                Username = clsUtil.Decrypt(Registry.GetValue(FilePathRegistry, "User Name", null) as string);
+
+                if (Username == null)
+                    return false;
+                else
+                    username = Username;
+
+                Password = clsUtil.Decrypt(Registry.GetValue(FilePathRegistry, "Password", null) as string);
+
+                if (Password == null)
+                    return false;
+                else
+                    password = Password;
+            }
+            catch { return false; }
 
             return true;
         }

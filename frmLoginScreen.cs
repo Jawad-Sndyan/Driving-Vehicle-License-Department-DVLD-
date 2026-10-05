@@ -38,10 +38,16 @@ namespace DVLD
                 if (chkRememberMe.Checked)
                 {
 
-                    clsGlobal.SaveCredentials(txtUsername.Text.Trim(), txtPassword.Text.Trim());
+                    // clsGlobal.SaveCredentials(txtUsername.Text.Trim(), txtPassword.Text.Trim());
+
+                    clsGlobal.SaveCredentialsToRegistry(txtUsername.Text.Trim(), txtPassword.Text.Trim());
                 }
                 else
-                    clsGlobal.SaveCredentials("", "");
+                {
+                    //clsGlobal.SaveCredentials("", "");
+                    clsGlobal.SaveCredentialsToRegistry("", "");
+
+                }
 
                 if (!User.IsActive)
                     MessageBox.Show("Your account is not active, contact Admin", "Inactive account");
@@ -63,7 +69,8 @@ namespace DVLD
         {
             string Username = "", Password = "";
 
-            if(clsGlobal.RetrieveCredentials(ref Username, ref Password))
+            //if(clsGlobal.RetrieveCredentials(ref Username, ref Password))
+            if (clsGlobal.RetrieveCredentialsFromRegistry(ref Username, ref Password))
             {
                 txtPassword.Text = Password;
                 txtUsername.Text = Username;
