@@ -60,6 +60,7 @@ namespace DVLD
             if (ucDriverLicenseInfoWithFilter.SelectedLicenseInfo.IsDetained)
             {
                 MessageBox.Show("Selected License is not detained, choose another one.", "Not Allowed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                clsGlobal.WarningPrompt("Not Allowed\nSelected License is not detained, choose another one.");
 
                 btnRelease.Enabled = false;
 
@@ -99,7 +100,10 @@ namespace DVLD
             
             if(!IsReleased)
             {
-                MessageBox.Show("Failed to release the detained License", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Failed to release the detained License", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                clsGlobal.WarningPrompt("Failed to release the detained License");
+
+
 
                 btnRelease.Enabled = false;
 
@@ -107,6 +111,7 @@ namespace DVLD
             }
 
             MessageBox.Show("Detained License released Successfully", "Detained License Released", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            clsGlobal.InformationPrompt("Detained License Released\nDetained License released Successfully");
 
 
             btnRelease.Enabled = false;

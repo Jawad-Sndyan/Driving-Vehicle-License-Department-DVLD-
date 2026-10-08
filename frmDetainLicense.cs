@@ -47,6 +47,7 @@ namespace DVLD
             if(ucDriverLicenseInfoWithFilter.SelectedLicenseInfo.IsDetained)
             {
                 MessageBox.Show("Selected License is already detained, choose another one.","Detain Failed",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                clsGlobal.WarningPrompt("Detain Failed\n\nSelected License is already detained, choose another one.");
 
                 btnDetain.Enabled = false;
 
@@ -68,6 +69,7 @@ namespace DVLD
             if( _DetainedID == -1)
             {
                 MessageBox.Show("Failed to Detain License", "Detain Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                clsGlobal.WarningPrompt("Failed to Detain License");
 
                 btnDetain.Enabled = false;
 
@@ -77,6 +79,7 @@ namespace DVLD
             lblDetainID.Text=_DetainedID.ToString();
 
             MessageBox.Show("License Detained Successfully\nID = "+_DetainedID.ToString(), "Detain Succeed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            clsGlobal.InformationPrompt("License Detained Successfully\nID = " + _DetainedID.ToString());
             btnDetain.Enabled = false;
             ucDriverLicenseInfoWithFilter.Enabled = false;
             txtFineFees.Enabled = false;
@@ -108,6 +111,7 @@ namespace DVLD
             {
                 e.Cancel = true;
                 errorProvider.SetError(txtFineFees, "This field is required!");
+                clsGlobal.ErrorPrompt($"{txtFineFees.Name}\nThis field is required!");
                 return;
             }
             else
@@ -121,6 +125,7 @@ namespace DVLD
             {
                 e.Cancel = true;
                 errorProvider.SetError(txtFineFees, "Fine Fees must be digits only.");
+                clsGlobal.ErrorPrompt("Fine Fees must be digits only.");
             }
             else
                 errorProvider.SetError(txtFineFees, null);

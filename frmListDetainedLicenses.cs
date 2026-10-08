@@ -202,6 +202,7 @@ namespace DVLD
             {
                 MessageBox.Show("This license is already released.", "Already Released",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                clsGlobal.WarningPrompt($"License with ID= {detainID}  already released.");
                 return;
             }
 
@@ -267,6 +268,7 @@ namespace DVLD
             if (string.IsNullOrEmpty(value))
             {
                 errorProvider.SetError(txtSearch, "This field is required");
+                clsGlobal.ErrorPrompt($"{txtSearch.Name}\nThis field is required");
                 return;
             }
 
@@ -275,21 +277,33 @@ namespace DVLD
                 case "Detain ID":
                 case "License ID":
                     if (!clsValidator.IsNumber(txtSearch.Text.Trim()))
+                    {
                         errorProvider.SetError(txtSearch, "This field accepts numbers only.");
+                        clsGlobal.ErrorPrompt($"{txtSearch.Text}\nThis field accepts numbers only.");
+                    }
+
                     else
                         errorProvider.SetError(txtSearch, "");
                     break;
 
                 case "National No.":
                     if (!clsValidator.IsNumber(txtSearch.Text.Trim()))
+                    {
                         errorProvider.SetError(txtSearch, "National No. accepts digits only.");
+                        clsGlobal.ErrorPrompt("National No. accepts digits only.");
+
+                    }
                     else
                         errorProvider.SetError(txtSearch, "");
                     break;
 
                 case "Full Name":
                     if (!clsValidator.IsValidFullName(txtSearch.Text.Trim()))
+                    {
                         errorProvider.SetError(txtSearch, "Full Name accepts letters only.");
+                        clsGlobal.ErrorPrompt("Full Name accepts letters only.");
+                    }
+
                     else
                         errorProvider.SetError(txtSearch, "");
                     break;
