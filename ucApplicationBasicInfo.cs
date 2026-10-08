@@ -44,6 +44,7 @@ namespace DVLD
             {
                 ResetApplicationInfo();
                 MessageBox.Show("No Application found with ID: " + applicationID.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                clsGlobal.ErrorPrompt("No Application found with ID: " + applicationID.ToString());
                 return;
             }
 

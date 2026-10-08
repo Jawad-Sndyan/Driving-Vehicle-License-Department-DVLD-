@@ -23,6 +23,7 @@ namespace DVLD
             if (_ApplicationType == null )
             {
                 MessageBox.Show("No Application Type with ID = " + _ApplicationTypeID.ToString(), "Application Type Not Found", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                clsGlobal.ErrorPrompt("Application Type Not Found\n\nNo Application Type with ID = " + _ApplicationTypeID.ToString());
                 this.Close();
 
                 return;
@@ -63,6 +64,7 @@ namespace DVLD
             {
                 e.Cancel = true;
                 errorProvider.SetError(Temp, "This field is required!");
+                clsGlobal.ErrorPrompt($"{Temp.Name}\nThis field is required!")
                 return false;
             }
             else
@@ -95,6 +97,7 @@ namespace DVLD
             {
                 e.Cancel = true;
                 errorProvider.SetError(txtFees, "Fees must be digits only.");
+                clsGlobal.ErrorPrompt("Fees must be digits only.");
             }
             else
                 errorProvider.SetError(txtFees, null);
@@ -104,6 +107,7 @@ namespace DVLD
             {
                 e.Cancel=true;
                 errorProvider.SetError(txtFees, $"New Fees must be Diferent from the Old Fees.\nOld Fees = {_ApplicationType.ApplicationFees}");
+                clsGlobal.ErrorPrompt($"New Fees must be Diferent from the Old Fees.\nOld Fees = {_ApplicationType.ApplicationFees}");
             }
             else
                 errorProvider.SetError(txtFees, null);
@@ -120,6 +124,7 @@ namespace DVLD
             if (!this.ValidateChildren())
             {
                 MessageBox.Show("Some fileds are not valid! \nPut the mouse over the red circle", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                clsGlobal.WarningPrompt("Some fileds are not valid! \nPut the mouse over the red circle");
                 return;
             }
 
@@ -129,10 +134,12 @@ namespace DVLD
             if(_ApplicationType.Save())
             {
                 MessageBox.Show("Data Saved Successfully.", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                clsGlobal.InformationPrompt("Data Saved Successfully.");
             }
             else
             {
                 MessageBox.Show("Error: Data Is not saved successfully", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                clsGlobal.ErrorPrompt("Error: Data Is not saved successfully");
             }
 
         }

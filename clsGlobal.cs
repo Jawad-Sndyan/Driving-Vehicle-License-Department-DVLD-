@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
-using Microsoft.Win32;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,11 +13,44 @@ namespace DVLD_Buisness
 {
     public class clsGlobal
     {
+
+        public static readonly string appSourceName = "DVLD";
         public static clsUser CurrentUser { get; set; }
 
         private static readonly string FilePathRegistry = @"HKEY_CURRENT_USER\Software\AlJawadProgrames\DVLD\Credentials";
 
         private static readonly string FilePath = @"F:\credentials.txt";
+
+        private static bool CreateEventLog()
+        {
+            if (!EventLog.SourceExists(appSourceName))
+            {
+                EventLog.CreateEventSource(appSourceName, "Application");
+                EventLog.WriteEntry(appSourceName, "Event Source Created", EventLogEntryType.Information);
+                return true;
+            }
+
+            return false;
+        }
+
+
+        public static void InformationPrompt(string message)
+        {
+            if (!CreateEventLog())
+                EventLog.WriteEntry(appSourceName, message, EventLogEntryType.Information);
+        }
+
+        public static void WarningPrompt(string message)
+        {
+            if (!CreateEventLog())
+                EventLog.WriteEntry(appSourceName, message, EventLogEntryType.Warning);
+        }
+
+        public static void ErrorPrompt(string message)
+        {
+            if (!CreateEventLog())
+                EventLog.WriteEntry(appSourceName, message, EventLogEntryType.Error);
+        }
 
         public static bool SaveCredentials(string username, string password)
         {

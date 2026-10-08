@@ -66,6 +66,9 @@ namespace DVLD
             if (_LocalDrivingLicenseApplication == null)
             {
                 MessageBox.Show("No Local Driving License Application with ID = " + _Local_D_L_App_ID.ToString(), "Local Driving License Application Not Found", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+                clsGlobal.ErrorPrompt("Local Driving License Application Not Found \n\nNo Local Driving License Application with ID = " + _Local_D_L_App_ID.ToString());
+
                 this.Close();
 
                 return;
@@ -107,7 +110,8 @@ namespace DVLD
 
             if (ActiveApplicationID != -1)
             {
-                MessageBox.Show("Choos another Licence Class,Choosen Person allready has an Application for selected class with id: " + ActiveApplicationID.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Choos another Licence Class,Choosen Person allready has an Application for selected class with id: " + ActiveApplicationID.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                clsGlobal.WarningPrompt("Choos another Licence Class,Choosen Person allready has an Application for selected class with id: " + ActiveApplicationID.ToString());
                 cbLicenseClass.Focus();
                 return;
             }
@@ -117,6 +121,7 @@ namespace DVLD
             if (AccomplishedApplicationID != -1)
             {
                 MessageBox.Show("Choos another Licence Class,Choosen Person allready has Local Driving License in "+ cbLicenseClass.Text, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                clsGlobal.WarningPrompt("Choos another Licence Class,Choosen Person allready has Local Driving License in " + cbLicenseClass.Text);
                 cbLicenseClass.Focus();
                 return;
             }
@@ -139,9 +144,15 @@ namespace DVLD
                 lblMode.Text = "Update Local Driving License Application";
 
                 MessageBox.Show("Data Saved Successfully.", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                clsGlobal.InformationPrompt("Update Local Driving License Application\n\nData Saved Successfully.");
             }
             else
+            {
                 MessageBox.Show("Error: Data Is not saved successfully", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                clsGlobal.WarningPrompt("Update Local Driving License Application\n\nError: Data Is not saved successfully");
+            }
+                
         }
 
         private void ucPersonCardWithFilter_OnPersonSelected(int obj)
@@ -167,6 +178,7 @@ namespace DVLD
             if (ucPersonCardWithFilter.PersonID == -1)
             {
                 MessageBox.Show("Please Select a Person");
+                clsGlobal.ErrorPrompt("Please Select a Person");
                 ucPersonCardWithFilter.FilterFocus();
                 return; 
             }
